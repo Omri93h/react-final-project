@@ -1,11 +1,21 @@
 .App {
-  text-align: center;
+  font-family: "ubuntu";
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+header {
+  position: sticky;
+  top: 0;
+  z-index: 99;
+  background-color: #1c316d;
+  height: 60px;
+  line-height: 60px;
+  width: 100%;
+  vertical-align: middle;
+  color: white;
 }
+
+/* 
+
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -35,4 +45,4 @@
   to {
     transform: rotate(360deg);
   }
-}
+} */
