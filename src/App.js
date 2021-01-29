@@ -21,13 +21,17 @@ function App() {
       <div className="App">
 
         <Header />
-        <Nav />
-        <Switch>
-          <Route exact path="/" component={Authentication} />
-          <Route path="/dashboard" component={Dashboard} />
-          <Route path="/strategies" component={Strategies} />
-          <Route path="/Settings" component={Settings} />
-        </Switch>
+        <div style={{ display: "table" }}>
+          <Nav />
+          <Switch>
+            <Route exact path="/" component={Authentication} />
+            <Route path="/dashboard" component={Dashboard} />
+            <Route path="/strategies" component={Strategies} />
+            <Route path="/Settings" component={Settings} />
+          </Switch>
+        </div>
+
+
         <Footer />
 
       </div>
