@@ -6,38 +6,29 @@ import SettingsIcon from '@material-ui/icons/Settings';
 
 
 const Nav = () => {
-    const navStyle = {
-        color: 'grey',
-
-    }
-
     return (
         <nav>
             <ul>
-                <li>
-                    <Link to="/Dashboard" style={navStyle}>
-                        <DashboardIcon fontSize="large">
-                            Dashboard
-                        </DashboardIcon>
+                <Link to="/Dashboard">
+                    <li>
+                        <DashboardIcon fontSize="large" />
+                        <span className="li-content" >Dashboard</span>
+                    </li>
+                </Link>
 
-                    </Link>
-                </li>
+                <Link to="/Strategies">
+                    <li>
+                        <EmojiObjectsIcon fontSize="large" />
+                        <span className="li-content" >Strategies</span>
+                    </li>
+                </Link>
 
-                <li>
-                    <Link to="/Strategies" style={navStyle}>
-                        <EmojiObjectsIcon fontSize="large">
-                            Strategies
-                        </EmojiObjectsIcon>
-                    </Link>
-                </li>
-
-                <li>
-                    <Link to="/Settings" style={navStyle}>
-                        <SettingsIcon fontSize="large">
-                            Settings
-                        </SettingsIcon>
-                    </Link>
-                </li>
+                <Link to="/Settings">
+                    <li>
+                        <SettingsIcon fontSize="large" />
+                        <span className="li-content" >Settings</span>
+                    </li>
+                </Link>
             </ul>
         </nav>
     )
