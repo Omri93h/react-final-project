@@ -2,9 +2,11 @@ import React from 'react'
 
 const Strategies = () => {
     return (
-        <div>
-WE ARE AT THE STARTEGIES!!!
-        </div>
+        <main>
+            <div>
+                WE ARE AT THE STARTEGIES!!!
+            </div>
+        </main>
     )
 }
 

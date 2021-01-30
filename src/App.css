@@ -34,31 +34,40 @@ header {
 
 nav {
   height: calc(100vh - 60px);
-  position: sticky;
-  width: 40px;
-  min-width: 40px;
+  position: relative;
+  width: 50px;
   box-shadow: 0px 0px 4px #666;
-  z-index: 2;
   display: table-cell;
   font-size: 16px;
   background-color: white;
-  transition: 0.5s ease-in-out;
-  text-align: center;
   color: lightblue;
-  vertical-align: middle;
-  overflow: hidden;
+  transition: all 0.5s ease-in-out;
 }
 
 nav:hover {
   width: 130px;
-  transition: 0.3s ease;
+  transition: all 0.3s ease;
+}
+
+nav ul {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 50px;
+  overflow: hidden;
+  transition: all 0.5s ease-in-out;
+}
+
+nav:hover ul {
+  width: 130px;
+  transition: all 0.5s ease-in-out;
 }
 
 nav li {
   list-style-type: none;
   display: flex;
   align-items: center;
-  width: 40px;
+  width: 50px;
   margin: 40px 0px;
   color: grey;
   padding-left: 5px;
@@ -74,4 +83,59 @@ nav:hover .li-content {
   opacity: 1;
   margin-left: 5px;
   transition: all 0.5s ease-in-out;
+}
+
+footer {
+  display: none; /*change!!!!!!!*/
+  position: relative;
+  width: 100%;
+  /* display: flex; */
+  background-color: #222;
+  color: #555;
+  height: 50px;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  bottom: 0px;
+}
+
+main {
+  display: table-cell;
+  flex-direction: column;
+  background-color: #ccc;
+  overflow: hidden;
+}
+
+section {
+  border-radius: 10px;
+  background-color: white;
+  padding: 15px;
+  padding-top: 5px;
+  box-shadow: 0px 2px 4px 0px #ccc;
+  margin-bottom: 20px;
+}
+
+.table {
+  display: table;
+  width: 100%;
+}
+
+.section-row {
+  display: flex;
+  gap: 40px;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.small-section {
+  min-width: 350px;
+  min-height: 150px;
+  flex-grow: 1;
+  margin-top: 10px;
+}
+
+.big-section {
+  margin-top: 20px;
+  height: 150px;
 }
