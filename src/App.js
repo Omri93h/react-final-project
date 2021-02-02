@@ -6,7 +6,9 @@ import Footer from './components/Footer';
 import Authentication from './components/Authentication';
 import Strategies from './components/Strategies';
 import Settings from './components/Settings';
+import Welcome from './components/Welcome';
 import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
+import SetStrategy from './components/SetStrategy';
 
 
 
@@ -20,20 +22,23 @@ function App() {
 
       <div className="App">
 
-        <Header />
+        <Header userConnected={true} />
 
         <div className="table">
+
           <Nav />
 
           <main>
-            <div className="wrapper" style={{ margin: "20px auto", width:"80%"}}>
+            <div className="wrapper" style={{ margin: "0px auto 30px auto ", width: "90%" }}>
               <Switch>
-                <Route exact path="/" component={Authentication} />
+                <Route exact path="/" component={Welcome} />
+                <Route path="/authentication" component={Authentication} />
                 <Route path="/dashboard" component={Dashboard} />
-                <Route path="/strategies" component={Strategies} />
-                <Route path="/Settings" component={Settings} />
+                <Route exact path="/strategies" component={Strategies} />
+                <Route path="/settings" component={Settings} />
+                <Route path="/strategies/:strategyName" component={SetStrategy} />
               </Switch>
-              
+
             </div>
             <Footer />
           </main>

@@ -17,11 +17,15 @@ a {
   color: white;
 }
 
+a:hover {
+  text-decoration: none;
+}
+
 header {
   display: flex;
   position: sticky;
   top: 0;
-  z-index: 99;
+  z-index: 1;
   background-color: #1c316d;
   height: 60px;
   line-height: 60px;
@@ -86,7 +90,8 @@ nav:hover .li-content {
 }
 
 footer {
-  display: none; /*change!!!!!!!*/
+  display: none;
+  /*change!!!!!!!*/
   position: relative;
   width: 100%;
   /* display: flex; */
@@ -103,8 +108,17 @@ footer {
 main {
   display: table-cell;
   flex-direction: column;
-  background-color: #ccc;
+  background-color: #ddd;
   overflow: hidden;
+}
+
+.page-header {
+  margin: 5px 0 15px 0;
+  display: block;
+  color: #1c316d;
+  font-size: 19px;
+  font-weight: 700;
+  /* opacity: 0.3; */
 }
 
 section {
@@ -123,19 +137,78 @@ section {
 
 .section-row {
   display: flex;
-  gap: 40px;
+  gap: 25px;
   width: 100%;
   justify-content: space-between;
+  height: fit-content;
 }
 
 .small-section {
-  min-width: 350px;
-  min-height: 150px;
+  min-width: 250px;
+  height: 120px;
   flex-grow: 1;
-  margin-top: 10px;
 }
 
 .big-section {
-  margin-top: 20px;
+  margin-bottom: 20px;
+  min-height: 150px;
+  height: auto;
+}
+
+.section-header {
+  display: block;
+  font-size: 15px;
+  color: #aaaaaa;
+  height: 20px;
+  box-shadow: 0px 2px 2px -2px #aaa;
+}
+
+.table-cell-header {
+  display: block;
+  font-size: 14px;
+  color: #999;
+  border-bottom: #ddd 1px dotted;
+  border-radius: 10%;
+  margin-bottom: 5px;
+}
+
+.card {
+  position: relative;
+  border: 1px solid darkgrey;
+  border-radius: 10px;
+  min-width: 200px;
+  width: 300px;
+  height: 180px;
+  margin: 30px auto;
+  margin-bottom: 15px;
+  transition: .1s ease-out;
+  text-align: center;
+  cursor: pointer;
+}
+
+.big-section a{
+  margin: 0 auto;
+  color: #1c316d;
+  font-family: monospace;
+}
+
+.card:hover {
+  box-shadow: 0px 3px 5px gray;
+  opacity: 0.6;
+}
+
+.card-header {
+  display: block;
+  position: absolute;
+  width: 100%;
+  line-height: 24px;
+  font-size: 20px;
+  margin-top: 5px;
+  text-align: center;
+}
+
+.card-image {
+  margin-top: 30px;
   height: 150px;
+  background-size: cover;
 }
