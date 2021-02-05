@@ -9,7 +9,7 @@ const SetStrategy = ({ match }) => {
         console.log(data);
     }
     return (
-        <div>
+        <div className="page">
             <div className="page-header">Strategy→ {match.params.strategyName}</div>
             <section className="big-section">
                 <div className="section-header">

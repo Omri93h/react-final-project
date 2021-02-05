@@ -7,48 +7,78 @@ import Authentication from './components/Authentication';
 import Strategies from './components/Strategies';
 import Settings from './components/Settings';
 import Welcome from './components/Welcome';
-import { Switch, Route, BrowserRouter as Router } from 'react-router-dom';
+import { Switch, Route, useLocation, Redirect } from 'react-router-dom';
 import SetStrategy from './components/SetStrategy';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import PageError from './components/PageError'
+import { useState } from 'react';
 
 
 
 function App() {
-  // const PAGE = {
-  //     DASHBOARD:'dashboard'
+  const location = useLocation();
+  const [isAuthorized, setAuth] = useState(false);
+  const a = { isAuthorized, setAuth }
+  // setAuth = () => {
+  //   !isAuthorized
   // }
 
   return (
-    <Router>
+    <div className="App">
 
-      <div className="App">
+      {isAuthorized ?
 
-        <Header userConnected={true} />
+        (<>
+          <Header userConnected={isAuthorized} />
+          <div className="table">
 
-        <div className="table">
+            <Nav />
+            <main>
 
-          <Nav />
+              <div className="wrapper">
 
-          <main>
-            <div className="wrapper" style={{ margin: "0px auto 30px auto ", width: "90%" }}>
-              <Switch>
-                <Route exact path="/" component={Welcome} />
-                <Route path="/authentication" component={Authentication} />
-                <Route path="/dashboard" component={Dashboard} />
-                <Route exact path="/strategies" component={Strategies} />
-                <Route path="/settings" component={Settings} />
-                <Route path="/strategies/:strategyName" component={SetStrategy} />
-              </Switch>
+                <TransitionGroup>
+                  <CSSTransition key={location.pathname} timeout={400} classNames="fade">
 
-            </div>
-            <Footer />
-          </main>
+                    <Switch location={location}>
+                      <Route exact path="/" render={() => (<Redirect to="/Dashboard" />)} />
+                      <Route path="/authentication" component={Authentication} />
+                      <Route path="/dashboard" component={Dashboard} />
+                      <Route exact path="/strategies" component={Strategies} />
+                      <Route path="/settings" component={Settings} />
+                      <Route path="/strategies/:strategyName" component={SetStrategy} />
+                      <Route exact path='*' component={PageError} />
+                    </Switch>
 
-        </div>
+                  </CSSTransition>
 
+                </TransitionGroup>
 
-      </div>
-    </Router>
-  );
+              </div>
+              <Footer />
+
+            </main>
+
+          </div>
+
+        </>)
+
+        :
+
+        (<>
+          <Header userConnected={isAuthorized} />
+          <Switch>
+            <Route render={(props) => <Welcome auth={a} />} />
+            <Route exact path='*'>
+              <Redirect to="/" exact />
+            </Route>
+
+          </Switch>
+        </>)
+      }
+
+    </div>
+  )
 }
 
 export default App;

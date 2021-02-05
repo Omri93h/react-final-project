@@ -3,13 +3,82 @@
   margin: 0;
 }
 
+body {
+  background-color: #ddd;
+}
+
+html {
+  overflow: hidden;
+}
+
 .App {
   font-family: "ubuntu";
   background-color: "f1f1f1";
 }
 
+.fade-appear, .fade-enter {
+  opacity: 0;
+  z-index: 1;
+  transform: scale(0.8);
+}
+
+.fade-appear-active, .fade-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition: opacity 500ms, transform 400ms;
+}
+
+.fade-exit {
+  opacity: 0;
+}
+
+.fade-exit.fade-exit-active {
+  opacity: 0;
+  transform: scale(0.1);
+  transition: opacity 300ms, transform 10000ms;
+}
+
+@keyframes slide-up {
+  from {
+    opacity: .1;
+    line-height: 100px;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.slide-up {
+  animation: slide-up 1s;
+}
+
+@keyframes fade-in-slow {
+  from {
+    opacity: 0.1;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.fade-in-slow {
+  animation: fade-in-slow 4s;
+}
+
 .material-icons {
   vertical-align: middle;
+}
+
+.videoContainer {
+  position: absolute;
+}
+
+video {
+  position: fixed;
+  object-fit: cover;
+  height: 100%;
+  width: 100%;
+  opacity: 1;
 }
 
 a {
@@ -34,9 +103,12 @@ header {
   color: white;
   justify-content: space-between;
   box-shadow: 0px 2px 4px gray;
+  font-size: 12px;
+  transition: 1s all ease
 }
 
 nav {
+  color: black;
   height: calc(100vh - 60px);
   position: relative;
   width: 50px;
@@ -45,7 +117,7 @@ nav {
   font-size: 16px;
   background-color: white;
   color: lightblue;
-  transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease;
 }
 
 nav:hover {
@@ -54,17 +126,23 @@ nav:hover {
 }
 
 nav ul {
+  list-style: none;
   position: fixed;
   top: 50%;
   transform: translateY(-50%);
   width: 50px;
   overflow: hidden;
-  transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease;
+  color: #aaa;
 }
 
 nav:hover ul {
   width: 130px;
-  transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease;
+}
+
+nav a {
+  color: inherit;
 }
 
 nav li {
@@ -73,20 +151,21 @@ nav li {
   align-items: center;
   width: 50px;
   margin: 40px 0px;
-  color: grey;
+  color: inherit;
   padding-left: 5px;
+  transition: 0.4s all ease
 }
 
 nav .li-content {
   opacity: 0;
-  transition: 0.5s ease-in-out;
+  transition: 0.4s ease-in-out;
+  margin-left: 2px;
 }
 
 nav:hover .li-content {
-  width: 150px;
+  width: 145px;
   opacity: 1;
-  margin-left: 5px;
-  transition: all 0.5s ease-in-out;
+  transition: opacity 0.5s ease-in-out;
 }
 
 footer {
@@ -105,6 +184,19 @@ footer {
   bottom: 0px;
 }
 
+header .user-side {
+  height: 60px;
+  position: absolute;
+  right: 30px;
+  display: flex;
+}
+
+.wrapper {
+  margin: 0 auto;
+  width: 90%;
+  transition: width 0.5s ease-in-out;
+}
+
 main {
   display: table-cell;
   flex-direction: column;
@@ -118,7 +210,6 @@ main {
   color: #1c316d;
   font-size: 19px;
   font-weight: 700;
-  /* opacity: 0.3; */
 }
 
 section {
@@ -186,7 +277,7 @@ section {
   cursor: pointer;
 }
 
-.big-section a{
+.big-section a {
   margin: 0 auto;
   color: #1c316d;
   font-family: monospace;

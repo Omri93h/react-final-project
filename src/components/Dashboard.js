@@ -7,31 +7,29 @@ const Dashboard = () => {
         display: "flex",
         justifyContent: "space-evenly",
         fontSize: "19px",
-        color:"#666"
+        color: "#666"
     }
     const positionsDataStyle = {
         marginTop: "10px",
         display: "table",
         width: "100%",
-        
+
     }
 
     const tableCell = {
         display: "table-cell",
         textAlign: "center",
-        // border: "1px solid blue",
         height: "auto",
         paddingBottom: "5px",
-        maxWidth:"30px"
+        maxWidth: "30px"
     }
 
     return (
-        <div>
+        <div className="page">
             <div className="page-header">D A S H B O A R D</div>
             <div className="section-row">
                 <section className="small-section">
                     <span className="section-header">Currenger Balance</span>
-
                 </section>
 
                 <section className="small-section">
@@ -87,7 +85,7 @@ const Dashboard = () => {
                         {/* ... */}
                     </div>
                     <div id="buy-or-sell" style={tableCell}>
-                        <div className="table-cell-header">Buy/Sell</div>
+                        <div className="table-cell-header">Buy / Sell</div>
                         {/* ... */}
                     </div>
                     <div id="expected-return" style={tableCell}>

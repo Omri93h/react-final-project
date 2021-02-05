@@ -13,19 +13,14 @@ const Header = (props) => {
 
     const appNameStyle = {
         color: "white",
-        marginLeft: "75px",
+        marginLeft: "60px",
         textShadow: "1px 1px 4px #111"
     }
 
 
     //right side styles
-
     const userSideStyle = {
-        border: "1px solid green",
-        height: "60px",
-        position: "absolute",
-        right: "30px",
-        display: "flex",
+
     }
 
     const ProfileIconStyle = {
@@ -39,6 +34,7 @@ const Header = (props) => {
         width: "auto",
         maxWidth: "80px",
         whiteSpace: "nowrap",
+        fontSize: "14px"
     }
 
     //right side properties
@@ -72,7 +68,7 @@ const Header = (props) => {
                     <h1 style={appNameStyle}>Currenger</h1>
                 </div>
             </Link>
-            <div className="user-side" style={userSideStyle}>
+            <div className="user-side">
                 {
                     props.userConnected ?
                         divUserIsConnected

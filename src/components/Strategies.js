@@ -12,7 +12,7 @@ const Strategies = () => {
 
     const strategiesPage = () => {
         return (
-            <div>
+            <div className="page">
                 <div className="page-header">S T R A T E G I E S</div>
                 <section className="big-section" id="active-strategies">
                     <span className="section-header">My Active Strategies</span>
