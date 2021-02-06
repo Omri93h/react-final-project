@@ -7,21 +7,22 @@ import SetStrategy from './SetStrategy';
 const Strategies = () => {
     const setStrategyPage = [];
     strategies.forEach((strategy) => (
-        setStrategyPage.push(strategy.name.replace(" ", "_"))
+        setStrategyPage.push(strategy.name.replaceAll(" ", "_"))
     ))
 
     const strategiesPage = () => {
         return (
             <div className="page">
-                <div className="page-header">S T R A T E G I E S</div>
+
+                <span className="page-header">S T R A T E G I E S</span>
                 <section className="big-section" id="active-strategies">
-                    <span className="section-header">My Active Strategies</span>
-                    <div id="active-strategies-container">
-                    </div>
+
+                    <span className="section-header">My Strategies</span>
+                    <div id="active-strategies-container"></div>
                 </section>
 
                 <section className="big-section">
-                    <div className="section-header">All Strategies</div>
+                    <div className="section-header">Add Strategy</div>
                     <Grid container spacing={3} justify="center" alignItems="center">
                         <Grid container item xs={12} spacing={3}>
                             {strategies.map((strategy) => (
@@ -31,7 +32,8 @@ const Strategies = () => {
                                         <img className="card-image" src={strategy.img} alt={strategy.name} />
                                     </div>
                                 </Link>
-                            ))}
+                            ))
+                            }
                         </Grid>
                     </Grid>
                 </section>

@@ -8,7 +8,7 @@ body {
 }
 
 html {
-  overflow: hidden;
+  overflow-y:hidden;
 }
 
 .App {
@@ -89,6 +89,13 @@ a {
 a:hover {
   text-decoration: none;
 }
+
+.react-numeric-input input {
+  padding: 5px;
+  width: 200px;
+  font-family: 'ubuntu';
+}
+
 
 header {
   display: flex;

@@ -42,21 +42,20 @@ const Welcome = (props) => {
                     </pre>
                     <div style={{ display: "flex", gap: "20px", marginTop: "30px" }} className="fade-in-slow">
                         <Link to="/dashboard">
-                            <Button variant="contained" style={{ opacity: "0.8" }} onClick={() => (props.auth.setAuth(true))}>
+                            <Button size="large" variant="contained" style={{ opacity: "0.8" }} onClick={() => (props.auth.setAuth(true))}>
                                 <b>Log in</b>
                             </Button>
                         </Link>
                         <Link to="/dashboard">
-                            <Button variant="contained" style={{ background: "#1c316d", color: "white", opacity: "0.8" }} >
+                            <Button size="large" variant="contained" style={{ background: "#1c316d", color: "white", opacity: "0.8" }} >
                                 <b>Sign Up</b>
                             </Button>
                         </Link>
 
                         <style type="text/css">
                             {` header {
+                                position:absolute;
                                 background-color: transparent;
-                                box-shadow: none;
-                                height:0px;
                                 transition:0.2s all ease
                             } 
                             header .user-side {

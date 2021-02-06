@@ -69,7 +69,7 @@ function App() {
           <Header userConnected={isAuthorized} />
           <Switch>
             <Route render={(props) => <Welcome auth={a} />} />
-            <Route exact path='*'>
+            <Route path='*'>
               <Redirect to="/" exact />
             </Route>
 
