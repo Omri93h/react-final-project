@@ -44,7 +44,7 @@ const Header = (props) => {
     const divUserIsConnected = (
         <>
             <div style={ProfileIconStyle}></div>
-            <div style={userNameStyle}>userName</div>
+            <div style={userNameStyle}>{props.username}</div>
         </>
     )
 

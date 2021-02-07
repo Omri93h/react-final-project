@@ -1,9 +1,10 @@
 import './App.css';
+import React from 'react';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
-import Authentication from './components/Authentication';
+// import Authentication from './components/Authentication';
 import Strategies from './components/Strategies';
 import Settings from './components/Settings';
 import Welcome from './components/Welcome';
@@ -17,11 +18,12 @@ import { useState } from 'react';
 
 function App() {
   const location = useLocation();
+
   const [isAuthorized, setAuth] = useState(false);
-  const a = { isAuthorized, setAuth }
-  // setAuth = () => {
-  //   !isAuthorized
-  // }
+  const authorization = { isAuthorized, setAuth };
+
+  const [userName, setUserName] = useState("");
+  const userControl = { userName, setUserName }
 
   return (
     <div className="App">
@@ -29,7 +31,7 @@ function App() {
       {isAuthorized ?
 
         (<>
-          <Header userConnected={isAuthorized} />
+          <Header userConnected={isAuthorized} username={userName} />
           <div className="table">
 
             <Nav />
@@ -42,7 +44,6 @@ function App() {
 
                     <Switch location={location}>
                       <Route exact path="/" render={() => (<Redirect to="/Dashboard" />)} />
-                      <Route path="/authentication" component={Authentication} />
                       <Route path="/dashboard" component={Dashboard} />
                       <Route exact path="/strategies" component={Strategies} />
                       <Route path="/settings" component={Settings} />
@@ -68,16 +69,20 @@ function App() {
         (<>
           <Header userConnected={isAuthorized} />
           <Switch>
-            <Route render={(props) => <Welcome auth={a} />} />
-            <Route path='*'>
-              <Redirect to="/" exact />
-            </Route>
+            <React.Fragment>
 
+              <Route render={(props) => <Welcome auth={authorization} user={userControl} />} />
+
+              <Route path='*'>
+                <Redirect to="/" />
+              </Route>
+
+            </React.Fragment>
           </Switch>
         </>)
       }
 
-    </div>
+    </div >
   )
 }
 

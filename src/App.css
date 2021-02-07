@@ -8,7 +8,7 @@ body {
 }
 
 html {
-  overflow-y:hidden;
+  overflow-y: overlay;
 }
 
 .App {
@@ -34,8 +34,6 @@ html {
 
 .fade-exit.fade-exit-active {
   opacity: 0;
-  transform: scale(0.1);
-  transition: opacity 300ms, transform 10000ms;
 }
 
 @keyframes slide-up {
@@ -95,7 +93,6 @@ a:hover {
   width: 200px;
   font-family: 'ubuntu';
 }
-
 
 header {
   display: flex;
@@ -212,7 +209,7 @@ main {
 }
 
 .page-header {
-  margin: 5px 0 15px 0;
+  margin: 10px 0 15px 0;
   display: block;
   color: #1c316d;
   font-size: 19px;
@@ -309,4 +306,26 @@ section {
   margin-top: 30px;
   height: 150px;
   background-size: cover;
+}
+
+@keyframes anvil {
+  0% {
+    transform: scale(1) translateX(0px);
+    opacity: 0;
+    box-shadow: 0 0 0 rgba(241, 241, 241, 0);
+  }
+  1% {
+    transform: scale(0.96) translateX(0px);
+    opacity: 0;
+    box-shadow: 0 0 0 rgba(241, 241, 241, 0);
+  }
+  100% {
+    transform: scale(1) translateX(0px);
+    opacity: 1;
+    box-shadow: 0 0 500px rgba(241, 241, 241, 0);
+  }
+}
+
+.popup-content {
+  -webkit-animation: anvil 0.2s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
 }

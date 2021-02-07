@@ -57,7 +57,7 @@ const SetStrategy = ({ match }) => {
 
     return (
         <div className="page">
-            <div className="page-header">Add Strategy → {match.params.strategyName.replaceAll("_", " ")}</div>
+            <div className="page-header">Add Strategy → {match.params.strategyName.replaceAll("_", "")}</div>
             <section className="big-section" style={{ width: "50%", margin: "0 auto" }}>
                 <span className="section-header">Strategy Configuration</span>
                 <div className="wrapper" style={{ textAlign: "center" }} >
