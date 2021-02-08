@@ -4,7 +4,6 @@ import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Nav from './components/Nav';
 import Footer from './components/Footer';
-// import Authentication from './components/Authentication';
 import Strategies from './components/Strategies';
 import Settings from './components/Settings';
 import Welcome from './components/Welcome';
@@ -68,11 +67,12 @@ function App() {
 
         (<>
           <Header userConnected={isAuthorized} />
+          <Welcome auth={authorization} user={userControl} />
           <Switch>
             <React.Fragment>
-
-              <Route render={(props) => <Welcome auth={authorization} user={userControl} />} />
-
+              <Route path="/login"/>
+              {/* <Route path="/" render={(props) => <Welcome auth={authorization} user={userControl} />} /> */}
+              <Route path="/sign-up"/>
               <Route path='*'>
                 <Redirect to="/" />
               </Route>

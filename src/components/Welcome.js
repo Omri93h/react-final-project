@@ -2,10 +2,9 @@
 import React from 'react';
 import Login, { loginButton } from './Login';
 import SignUp, { signUpButton } from './SignUp';
-import { useForm, Controller } from 'react-hook-form'; //delete
-import { Input } from '@material-ui/core'; //delete
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import { Route } from 'react-router-dom'
 
 
 const Welcome = (props) => {
@@ -51,12 +50,12 @@ const Welcome = (props) => {
                     </pre>
 
                     <div style={{ display: "flex", gap: "20px", marginTop: "30px", height: "50px" }} className="fade-in-slow">
+
                         <Popup trigger={loginButton} modal closeOnDocumentClick {...{ contentStyle, overlayStyle }}>
                             <Login auth={props.auth} user={props.user} />
-
                         </Popup>
                         <Popup trigger={signUpButton} modal closeOnDocumentClick {...{ contentStyle, overlayStyle }}>
-                            {SignUp}
+                            <SignUp />
                         </Popup>
 
                     </div>
