@@ -12,12 +12,13 @@ import SetStrategy from './components/SetStrategy';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import PageError from './components/PageError'
 import { useState } from 'react';
-
+import Cookies from 'js-cookie';
 
 
 function App() {
   const location = useLocation();
-
+  const myCoocie = Cookies.get('david'); 
+  console.log(myCoocie);
   const [isAuthorized, setAuth] = useState(false);
   const authorization = { isAuthorized, setAuth };
 
