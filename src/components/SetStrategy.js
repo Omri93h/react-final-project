@@ -19,16 +19,13 @@ const pairs = [
 
 const SetStrategy = ({ match }) => {
 
-    const { control, handleSubmit } = useForm();
-
     const [selected, handleSelected] = useState(null);
-
     function chooseSelected(opt) {
         handleSelected(opt);
         console.log(`selected : ${opt.value}`)
     }
 
-    //Handling Submit
+    const { control, handleSubmit } = useForm();
     const onSubmit = data => {
         console.log(data);
     }
@@ -39,22 +36,17 @@ const SetStrategy = ({ match }) => {
 
     function amountFormat(num) {
         if (!selected) {
-            // alert("Please choose a trading pair !");
-            console.log("alertt1");
+            console.log("alertt");
             return (num + " ");
         }
         const currency = selected.label.slice(0, -4);
         return (num + " " + currency);
-        console.log("alertt2");
     }
 
     const customStyles = {
-
         valueContainer: () => ({
             width: "160px"
         })
-
-
     }
 
     return (

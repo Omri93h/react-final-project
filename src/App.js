@@ -12,14 +12,25 @@ import SetStrategy from './components/SetStrategy';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import PageError from './components/PageError'
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 
 
 
 function App() {
   const location = useLocation();
 
+
   const [isAuthorized, setAuth] = useState(false);
   const authorization = { isAuthorized, setAuth };
+
+  let cookies = Cookies.get();
+  // alert("cookies: ", cookies);
+  if (cookies) {
+    console.log("WE HAVE COOKIES");
+    // setAuth(true);
+  } else {
+    console.log("No COOKIES!")
+  }
 
   const [userName, setUserName] = useState("");
   const userControl = { userName, setUserName }
@@ -33,14 +44,14 @@ function App() {
           <Header userConnected={isAuthorized} username={userName} />
           <div className="table">
 
-            <Nav />
+            <Nav /> 
             <main>
 
               <div className="wrapper">
 
                 <TransitionGroup>
                   <CSSTransition key={location.pathname} timeout={400} classNames="fade">
-
+              
                     <Switch location={location}>
                       <Route exact path="/" render={() => (<Redirect to="/Dashboard" />)} />
                       <Route path="/dashboard" component={Dashboard} />
