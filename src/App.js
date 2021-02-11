@@ -13,7 +13,7 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import PageError from './components/PageError'
 import { useState, useEffect } from 'react';
 
-import Login, { loginButton } from './components/Login';
+import Login from './components/Login';
 
 async function getUser(setAuth, setHasBinanceAPI, setThumbnailUrl) {
   const response = await fetch('http://localhost:8080/profile', {

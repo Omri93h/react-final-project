@@ -31,47 +31,43 @@ const Header = (props) => {
         textShadow: "1px 1px 4px #111"
     }
 
-
     //right side styles
     const ProfileIcon = props.thumbnail ? props.thumbnail : defaultProfileIcon;
-    console.log(props)
     const ProfileIconStyle = {
         background: `url(${ProfileIcon}) no-repeat left center`,
         width: "40px",
-        height:"40px",
-        borderRadius:"50%",
-        backgroundSize:"40px",
-        marginTop:"10px"
+        height: "40px",
+        borderRadius: "50%",
+        backgroundSize: "40px",
+        marginTop: "10px"
     }
 
     const userNameStyle = {
         textOverflow: "ellipsis",
         overflow: "hidden",
         width: "auto",
-        marginLeft:"10px",
-        maxWidth: "80px",
+        marginLeft: "10px",
         whiteSpace: "nowrap",
-        fontSize: "14px"
+        fontSize: "14px",
     }
 
     //right side properties
 
-    const userName = "userName";
-
     const divUserIsConnected = (
         <>
-            <div style={{ height: "50px", marginRight: "20px" }}>
-                <Button onClick={() => { logOutUser() }} name="log-out" size="small" variant="contained" style={{ fontSize: "12px" }}>Log out</Button>
-            </div>
             <div style={ProfileIconStyle}></div>
-            <div style={userNameStyle}>{props.username}</div>
+            <div style={userNameStyle}>{props.username}<br />
+                <div style={{ marginRight: "20px",width:"", position: "absolute", top: "15px",textAlign:"left"}}>
+                    <Button onClick={() => { logOutUser() }} size="small" color="green" style={{ fontSize: "11px", color: "gray", margin:"0", padding:"0", textAlign:"left" }}>Log out </Button>
+                </div>
+            </div>
 
         </>
     )
 
     const divUserIsNotConnected = (
         <>
-            <Link to="/Authentication"><button>Login / Register</button></Link>
+            <Link to="/Login"><Button size="small" variant="link">Login / Register</Button></Link>
         </>
     );
 
