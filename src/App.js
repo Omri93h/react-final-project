@@ -11,89 +11,115 @@ import { Switch, Route, useLocation, Redirect } from 'react-router-dom';
 import SetStrategy from './components/SetStrategy';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import PageError from './components/PageError'
-import { useState } from 'react';
-import Cookies from 'js-cookie';
+import { useState, useEffect } from 'react';
 
+import Login, { loginButton } from './components/Login';
 
+async function getUser(setAuth, setHasBinanceAPI, setThumbnailUrl) {
+  const response = await fetch('http://localhost:8080/profile', {
+    credentials: 'include'
+  })
+  let userData = "";
+  try {
+    userData = await response.json();
+    if (userData.binance_key !== "") {
+      setHasBinanceAPI(true)
+      setThumbnailUrl(userData.thumbnail)
+    }
+    setAuth(true);
+    return userData.username;
+  }
+  catch {
+    setAuth(false);
+    return null
+  }
+}
 
 function App() {
   const location = useLocation();
-
-
+  const [thumbnailUrl, setThumbnailUrl] = useState(null);
   const [isAuthorized, setAuth] = useState(false);
+  const [hasBinanceAPI, setHasBinanceAPI] = useState(false);
   const authorization = { isAuthorized, setAuth };
 
-  let cookies = Cookies.get();
-  // alert("cookies: ", cookies);
-  if (cookies) {
-    console.log("WE HAVE COOKIES");
-    // setAuth(true);
-  } else {
-    console.log("No COOKIES!")
-  }
+  useEffect(() => {
+    async function Fetch() {
+      const username = await getUser(setAuth, setHasBinanceAPI, setThumbnailUrl);
+      setUserName(username)
+    }
+    Fetch();
+  }, []);
 
   const [userName, setUserName] = useState("");
   const userControl = { userName, setUserName }
 
   return (
     <div className="App">
+      {
+        isAuthorized ?
+          (
+            <>
+              <Header authorization={authorization} username={userName} thumbnail={thumbnailUrl} />
+              {
+                hasBinanceAPI ?
+                  <>
+                    <div className="table">
 
-      {isAuthorized ?
+                      <Nav />
+                      <main>
 
-        (<>
-          <Header userConnected={isAuthorized} username={userName} />
-          <div className="table">
+                        <div className="wrapper">
 
-            <Nav /> 
-            <main>
+                          <TransitionGroup>
+                            <CSSTransition key={location.pathname} timeout={400} classNames="fade">
 
-              <div className="wrapper">
+                              <Switch location={location} name="logged-in">
+                                <Route exact path="/" render={() => (<Redirect to="/Dashboard" />)} />
+                                <Route path="/dashboard" component={Dashboard} />
+                                <Route exact path="/strategies" component={Strategies} />
+                                <Route path="/settings" component={Settings} />
+                                <Route path="/strategies/:strategyName" component={SetStrategy} />
+                                <Route path='*' component={PageError} />
+                              </Switch>
 
-                <TransitionGroup>
-                  <CSSTransition key={location.pathname} timeout={400} classNames="fade">
-              
-                    <Switch location={location}>
-                      <Route exact path="/" render={() => (<Redirect to="/Dashboard" />)} />
-                      <Route path="/dashboard" component={Dashboard} />
-                      <Route exact path="/strategies" component={Strategies} />
-                      <Route path="/settings" component={Settings} />
-                      <Route path="/strategies/:strategyName" component={SetStrategy} />
-                      <Route exact path='*' component={PageError} />
+                            </CSSTransition>
+
+                          </TransitionGroup>
+
+                        </div>
+                        <Footer />
+
+                      </main>
+
+                    </div>
+                  </>
+                  :
+                  <>
+                    <Switch location={location} name="no-API"  >
+                      <Route path='*' render={() => (<Login setHasBinanceAPI={setHasBinanceAPI} />)} />
                     </Switch>
+                  </>
+              }
+            </>
+          )
+          :
+          (
+            <>
+              <Header authorization={authorization} username={userName} thumbnail={thumbnailUrl} />
 
-                  </CSSTransition>
-
-                </TransitionGroup>
-
-              </div>
-              <Footer />
-
-            </main>
-
-          </div>
-
-        </>)
-
-        :
-
-        (<>
-          <Header userConnected={isAuthorized} />
-          <Welcome auth={authorization} user={userControl} />
-          <Switch>
-            <React.Fragment>
-              <Route path="/login"/>
-              {/* <Route path="/" render={(props) => <Welcome auth={authorization} user={userControl} />} /> */}
-              <Route path="/sign-up"/>
-              <Route path='*'>
-                <Redirect to="/" />
-              </Route>
-
-            </React.Fragment>
-          </Switch>
-        </>)
+              <Switch name="not-logged-in">
+                <React.Fragment>
+                  <Route exact path="/" render={() => <Welcome auth={authorization} user={userControl} />} />
+                  <Route path="/sign-up" />
+                  {isAuthorized && hasBinanceAPI ? {} : <Redirect to="/" />}
+                </React.Fragment>
+              </Switch>
+            </>
+          )
       }
 
     </div >
+
   )
 }
 

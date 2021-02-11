@@ -11,7 +11,7 @@ async function fetchData() {
     
     const data = []
     for (const asset in commits) {
-        if (asset == 'BTC') {
+        if (asset === 'BTC') {
             commits[asset] = commits[asset].toFixed(6)
         } else {
             commits[asset] = commits[asset].toFixed(3)
@@ -76,7 +76,7 @@ const Dashboard = () => {
                 <section className="small-section">
                     <span className="section-header">Currenger Balance</span>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <div style={{ height: "120px", width: "100px"}}>
+                        <div style={{ height: "120px", width: "80px"}}>
                             <span style={{ fontSize: "18px", fontWeight: "bold" }}>TOTAL:</span><br /><br />
                             <span style={{ fontSize: "16px" }}>0.000000 BTC</span> <br />
                             <span style={{ fontSize: "11px" }}>0000000 <>$</></span>
