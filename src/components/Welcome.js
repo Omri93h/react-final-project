@@ -1,11 +1,13 @@
 // import { Redirect, useHistory } from 'react-router-dom';
-import { GoogleLogin } from 'react-google-login';
+// import { GoogleLogin } from 'react-google-login';
 import React from 'react';
 import Login, { loginButton } from './Login';
 import SignUp, { signUpButton } from './SignUp';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import Button from '@material-ui/core/Button';
+
+import { Switch, Route, useLocation, Redirect } from 'react-router-dom';
 
 const Welcome = (props) => {
     const video = process.env.PUBLIC_URL + '/vid/video2.mp4';
@@ -15,8 +17,6 @@ const Welcome = (props) => {
     }
 
     const routeChange = () => {
-        alert("clickedddddddddddd");
-        // <Redirect to="http://localhost:8080/auth/google" />
         window.location.assign('http://localhost:8080/auth/google');
     }
 
@@ -61,23 +61,28 @@ const Welcome = (props) => {
                     </pre>
 
                     <div style={{ display: "flex", gap: "20px", marginTop: "30px", height: "50px" }} className="fade-in-slow">
+                        {/* <Button onClick={() => (<Redirect to="/login" />)} size="large" variant="contained" style={{ background: "#1c316d", color: "white", opacity: "0.8" }}>
+                            New LOGIN
+                        </Button>
 
                         <Popup trigger={loginButton} modal closeOnDocumentClick {...{ contentStyle, overlayStyle }}>
                             <Login auth={props.auth} user={props.user} />
                         </Popup>
                         <Popup trigger={signUpButton} modal closeOnDocumentClick {...{ contentStyle, overlayStyle }}>
+
                             <SignUp />
-                        </Popup>
-                        <Button onClick={routeChange} size="large" variant="contained" style={{ background: "#1c316d", color: "white", opacity: "0.8" }}>
-                            Log In With GOOGLE
+                        </Popup> */}
+                        <Button onClick={routeChange} size="large" variant="contained" style={{ background: "#1c316d", color: "white", opacity: "0.8", fontWeight: "bold", padding:"10px" }}>
+                            <pre style={{fontSize:"16px"}}><p style={{ fontSize: "10px" }}>Login / Register with</p>
+                                GOOGLE</pre>
                         </Button>
-                        <GoogleLogin
+                        {/* <GoogleLogin
                             clientId="750359505569-qe7otcmnt176nsn1gosmp4am6h5jssq6.apps.googleusercontent.com"
                             buttonText="Login with Google"
                             onSuccess={responseGoogle}
                             onFailure={responseGoogle}
                             cookiePolicy={'single_host_origin'}
-                        />
+                        /> */}
                     </div>
                 </div>
             </div>
