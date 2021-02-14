@@ -7,9 +7,7 @@ import { Route, BrowserRouter as Router } from 'react-router-dom';
 ReactDOM.render(
 
   <Router>
-    {/* <CookiesProvider> */}
-      <Route path="/" component={App} />
-    {/* </CookiesProvider> */}
+    <Route path="/" component={App} />
   </Router >
   ,
   document.getElementById('root')

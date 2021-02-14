@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { useForm, Controller } from 'react-hook-form';
 import { Input } from '@material-ui/core';
-import { useHistory, Redirect } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 async function insertData(data) {
     var new_data = { binance_key: data.binance_key, binance_private: data.binance_private };

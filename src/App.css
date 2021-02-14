@@ -264,7 +264,7 @@ section {
 }
 
 .small-section {
-  min-width: 180px;
+  min-width: 220px;
   height: 200px;
   flex-grow: 1;
 }
