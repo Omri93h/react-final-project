@@ -1,20 +1,10 @@
-// import { Redirect, useHistory } from 'react-router-dom';
-// import { GoogleLogin } from 'react-google-login';
 import React from 'react';
-import Login, { loginButton } from './Login';
-import SignUp, { signUpButton } from './SignUp';
-import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import Button from '@material-ui/core/Button';
 
-import { Switch, Route, useLocation, Redirect } from 'react-router-dom';
 
 const Welcome = (props) => {
     const video = process.env.PUBLIC_URL + '/vid/video2.mp4';
-
-    const responseGoogle = (response) => {
-        console.log(response);
-    }
 
     const routeChange = () => {
         window.location.assign('http://localhost:8080/auth/google');
@@ -72,17 +62,10 @@ const Welcome = (props) => {
 
                             <SignUp />
                         </Popup> */}
-                        <Button onClick={routeChange} size="large" variant="contained" style={{ background: "#1c316d", color: "white", opacity: "0.8", fontWeight: "bold", padding:"10px" }}>
-                            <pre style={{fontSize:"16px"}}><p style={{ fontSize: "10px" }}>Login / Register with</p>
+                        <Button onClick={routeChange} size="large" variant="contained" style={{ background: "#1c316d", color: "white", opacity: "0.8", fontWeight: "bold", padding: "10px" }}>
+                            <pre style={{ fontSize: "16px" }}><p style={{ fontSize: "10px" }}>Login / Register with</p>
                                 GOOGLE</pre>
                         </Button>
-                        {/* <GoogleLogin
-                            clientId="750359505569-qe7otcmnt176nsn1gosmp4am6h5jssq6.apps.googleusercontent.com"
-                            buttonText="Login with Google"
-                            onSuccess={responseGoogle}
-                            onFailure={responseGoogle}
-                            cookiePolicy={'single_host_origin'}
-                        /> */}
                     </div>
                 </div>
             </div>

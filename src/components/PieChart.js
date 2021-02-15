@@ -5,31 +5,31 @@ const PieChart = ({ data }) => (
         data={data}
         sortByValue={true}
         valueFormat=" >-$0,~"
-        margin={{ top: 20, right: 0, bottom: 10, left: -100}}
+        margin={{ top:10, right: 0, bottom: 20, left: 0}}
         padAngle={0.7}
         cornerRadius={0}
         colors={{ scheme: 'nivo' }}
         borderWidth={1}
         borderColor={{ from: 'color', modifiers: [['brighter', '3']] }}
-        radialLabelsTextXOffset={5}
+        radialLabelsTextXOffset={3}
         radialLabelsTextColor="#333333"
         radialLabelsLinkOffset={-4}
-        radialLabelsLinkDiagonalLength={10}
+        radialLabelsLinkDiagonalLength={5}
         radialLabelsLinkHorizontalLength={10}
         radialLabelsLinkColor={{ from: 'color' }}
-        sliceLabelsRadiusOffset={0.75}
+        sliceLabelsRadiusOffset={0.55}
         sliceLabelsTextColor="#333333"
         legends={[
             {
                 anchor: 'right',
-                direction: 'column',
+                direction: 'row',
                 justify: false,
-                translateX: -5,
-                translateY: -40,
-                itemWidth: 98,
-                itemHeight: 20,
-                itemsSpacing: 0,
-                symbolSize: 11,
+                translateX: 0,
+                translateY: 65,
+                itemWidth: 100,
+                itemHeight: 15,
+                itemsSpacing: 2,
+                symbolSize: 10,
                 itemDirection: 'left-to-right'
             }
         ]}

@@ -12,8 +12,14 @@ import SetStrategy from './components/SetStrategy';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import PageError from './components/PageError'
 import { useState, useEffect } from 'react';
+import Login from './components/Login';
 
-import Login, { loginButton } from './components/Login';
+async function testConnection() {
+  fetch('http://localhost:8080/api/binance/connect', {
+    credentials: 'include',
+    withCredentials: 'true'
+  })
+}
 
 async function getUser(setAuth, setHasBinanceAPI, setThumbnailUrl) {
   const response = await fetch('http://localhost:8080/profile', {
@@ -23,10 +29,12 @@ async function getUser(setAuth, setHasBinanceAPI, setThumbnailUrl) {
   try {
     userData = await response.json();
     if (userData.binance_key !== "") {
+      await testConnection();
       setHasBinanceAPI(true)
       setThumbnailUrl(userData.thumbnail)
     }
     setAuth(true);
+
     return userData.username;
   }
   catch {
@@ -43,11 +51,10 @@ function App() {
   const authorization = { isAuthorized, setAuth };
 
   useEffect(() => {
-    async function Fetch() {
+    (async function Fetch() {
       const username = await getUser(setAuth, setHasBinanceAPI, setThumbnailUrl);
       setUserName(username)
-    }
-    Fetch();
+    })();
   }, []);
 
   const [userName, setUserName] = useState("");

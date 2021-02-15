@@ -1,58 +1,51 @@
 import PieChart from './PieChart';
 import { useState, useEffect } from 'react';
+import Loading from './Loading';
 
 
-async function fetchData() {
-    let url = 'https://omridavidproject.herokuapp.com/api/portfolio/';
-    let response = await fetch(url);
-    let commits = await response.json();
-    console.log("from api:", commits)
-
-    
-    const data = []
-    for (const asset in commits) {
-        if (asset === 'BTC') {
-            commits[asset] = commits[asset].toFixed(6)
-        } else {
-            commits[asset] = commits[asset].toFixed(3)
-        }
-        data.push({ "id": asset, "label": (commits[asset] + " " + asset), "amount": commits[asset] , "value":"300"})
-    }
-    console.log("needed: ", data)
-    return data;
-}
 const Dashboard = () => {
-
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
 
     // useEffect with an empty dependency array works the same way as componentDidMount
-    useEffect(async () => {
-        try {
-            // set loading to true before calling API
-            setLoading(true);
-            const data = await fetchData();
-            setData(data);
-            // switch loading to false after fetch is complete
-            setLoading(false);
-            console.log(data)
-        } catch (error) {
-            // add error handling here
-            setLoading(false);
-            console.log(error);
+    useEffect(() => {
+        async function fetchData() {
+            let url = 'http://localhost:8080/api/portfolio/';
+            let response = await fetch(url, {
+                credentials: 'include',
+                withCredentials: 'true'
+            });
+            let commits = await response.json();
+
+            const data = []
+            for (const i in commits) {
+                if (commits[i].id === 'BTC') {
+                    commits[i].amount = Number(commits[i].amount).toFixed(6)
+                } else {
+                    commits[i].amount = Number(commits[i].amount).toFixed(3)
+                }
+                data.push({
+                    "id": commits[i].id, "label": commits[i].id + " " + commits[i].amount,
+                    "amount": commits[i].amount, "value": commits[i].value.toFixed(1)
+                })
+            }
+            return data;
         }
+        async function Init() {
+            try {
+                // set loading to true before calling API
+                setLoading(true);
+                const data = await fetchData();
+                setData(data);
+                // switch loading to false after fetch is complete
+                setLoading(false);
+            } catch (error) {
+                // add error handling here
+                setLoading(false);
+            }
+        }
+        Init();
     }, []);
-
-    // return a Spinner when loading is true
-    if (loading) return (
-        <span>Loading</span>
-    );
-
-    // data will be null when fetch call fails
-    if (!data) return (
-        <span>Data not available</span>
-    );
-
 
     const positionsDataStyle = {
         marginTop: "10px",
@@ -75,19 +68,24 @@ const Dashboard = () => {
             <div className="section-row">
                 <section className="small-section">
                     <span className="section-header">Currenger Balance</span>
-                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                        <div style={{ height: "120px", width: "80px"}}>
-                            <span style={{ fontSize: "18px", fontWeight: "bold" }}>TOTAL:</span><br /><br />
-                            <span style={{ fontSize: "16px" }}>0.000000 BTC</span> <br />
-                            <span style={{ fontSize: "11px" }}>0000000 <>$</></span>
+                    {loading ?
+                        <Loading data={data} isLoading={loading} />
+                        :
+                        <div className="fade-in-fast" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative" }}>
+                            <div style={{ height: "120px", width: "80px" }}>
+                                <span style={{ fontSize: "18px", fontWeight: "bold" }}>TOTAL:</span><br /><br />
+                                <span style={{ fontSize: "16px" }}>0.000000 BTC</span> <br />
+                                <span style={{ fontSize: "11px" }}>0000000 <>$</></span>
+                            </div>
+                            <div style={{ height: "140px", width: "200px", marginTop: "20px" }}>
+                                <PieChart data={data} />
+                            </div>
                         </div>
-                        <div style={{ height: "150px", width: "300px" }}>
-                            <PieChart data={data} />
-                        </div>
-                    </div>
+                    }
+
                 </section>
 
-                <section className="small-section">
+                <section className="small-section" >
                     <span className="section-header">Stats</span>
                     <div className="stats-data" style={positionsDataStyle}>
                         <div id="daily-stat" style={tableCell}>
