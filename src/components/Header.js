@@ -58,7 +58,7 @@ const Header = (props) => {
             <div style={ProfileIconStyle}></div>
             <div style={userNameStyle}>{props.username}<br />
                 <div style={{ marginRight: "20px",width:"", position: "absolute", top: "15px",textAlign:"left"}}>
-                    <Button onClick={() => { logOutUser() }} size="small" color="green" style={{ fontSize: "11px", color: "gray", margin:"0", padding:"0", textAlign:"left" }}>Log out </Button>
+                    <Button onClick={() => { logOutUser() }} size="small" style={{ fontSize: "11px", color: "gray", margin:"0", padding:"0", textAlign:"left" }}>Log out </Button>
                 </div>
             </div>
 
@@ -67,7 +67,7 @@ const Header = (props) => {
 
     const divUserIsNotConnected = (
         <>
-            <Link to="/Login"><Button size="small" variant="link">Login / Register</Button></Link>
+            <Link to="/Login"><Button size="small" variant="text" >Login / Register</Button></Link>
         </>
     );
 

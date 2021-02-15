@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
@@ -13,7 +13,7 @@ const Nav = () => {
 
     const DashboardLink = (
         <NavLink to="/Dashboard" activeStyle={activeStyle}>
-            <li activeClassName>
+            <li >
                 <DashboardIcon fontSize="large" />
                 <div className="li-content" >Dashboard</div>
             </li>
