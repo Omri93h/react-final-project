@@ -1,7 +1,6 @@
 * {
   padding: 0;
   margin: 0;
-  
 }
 
 body {
@@ -15,7 +14,7 @@ html {
 .App {
   font-family: "ubuntu";
   background-color: "f1f1f1";
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 /* width */
@@ -27,13 +26,13 @@ html {
 /* Track */
 
 ::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: tra;
 }
 
 /* Handle */
 
 ::-webkit-scrollbar-thumb {
-  background: #aaa;
+  background: #435279;
 }
 
 /* Handle on hover */
@@ -199,6 +198,11 @@ nav li {
   transition: 0.4s all ease
 }
 
+g text {
+  font-size: 13.5px !important;
+  font-family: 'ubuntu' !important;
+  font-weight: bold;
+}
 
 nav .li-content {
   opacity: 0;
@@ -213,14 +217,14 @@ nav:hover .li-content {
 }
 
 footer {
-  display: none;
-  /*change!!!!!!!*/
-  position: relative;
-  width: 100%;
-  /* display: flex; */
+  position: absolute;
+  bottom: 0px;
+  margin-bottom: -40px;
+  /* width: 100%; */
+  display: flex;
   background-color: #222;
   color: #555;
-  height: 50px;
+  height: 40px;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
@@ -263,6 +267,7 @@ section {
   padding-top: 5px;
   box-shadow: 0px 2px 4px 0px #ccc;
   margin-bottom: 20px;
+  z-index: 1;
 }
 
 .table {
@@ -276,19 +281,23 @@ section {
   width: 100%;
   justify-content: space-between;
   height: fit-content;
+  transition: all 2s ease-in-out;
 }
 
 .small-section {
-  min-width: 220px;
-  width:200px;
+  min-width: 200px;
+  max-width: 750px;
   height: 200px;
   flex-grow: 1;
+  transition: all 2s ease-in-out;
+  z-index: 99;
 }
 
 .big-section {
   margin-bottom: 20px;
   min-height: 150px;
   height: auto;
+  z-index: 99;
 }
 
 .section-header {
@@ -359,31 +368,4 @@ section {
   margin-top: 30px;
   height: 150px;
   background-size: cover;
-}
-
-@keyframes anvil {
-  0% {
-    transform: scale(1) translateX(0px);
-    opacity: 0;
-    box-shadow: 0 0 0 rgba(241, 241, 241, 0);
-  }
-  1% {
-    transform: scale(0.96) translateX(0px);
-    opacity: 0;
-    box-shadow: 0 0 0 rgba(241, 241, 241, 0);
-  }
-  100% {
-    transform: scale(1) translateX(0px);
-    opacity: 1;
-    box-shadow: 0 0 500px rgba(241, 241, 241, 0);
-  }
-}
-
-.popup-content {
-  -webkit-animation: anvil 0.2s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
-}
-
-.Select-menu-outer {
-  z-index: 999 !important;
-  position: relative;
 }

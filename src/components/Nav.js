@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import DashboardIcon from '@material-ui/icons/Dashboard';
 import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 import SettingsIcon from '@material-ui/icons/Settings';
+import AddShoppingCartIcon from '@material-ui/icons/AddShoppingCart';
 
 
 const Nav = () => {
@@ -39,11 +40,21 @@ const Nav = () => {
         </NavLink>
     )
 
+    const ManualOrderLink = (
+        <NavLink to="/Manual_Order" activeStyle={activeStyle}>
+            <li>
+                <AddShoppingCartIcon fontSize="large" />
+                <div className="li-content" >Manual<br/>Order</div>
+            </li>
+        </NavLink>
+    )
+
     return (
         <nav>
             <ul>
                 {DashboardLink}
                 {StrategiesLink}
+                {ManualOrderLink}
                 {SettingsLink}
 
             </ul>

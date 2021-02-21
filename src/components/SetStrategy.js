@@ -3,11 +3,10 @@ import Select from 'react-select';
 import { useForm, Controller } from 'react-hook-form';
 import NumericInput from 'react-numeric-input';
 import AddIcon from '@material-ui/icons/Add';
-
 import { Button } from "@material-ui/core";
 
 
-const pairs = [
+const symbols = [
     { value: 'DOGEBTC', label: 'DOGE/BTC' },
     { value: 'ETHBTC', label: 'ETH/BTC' },
     { value: 'LTCBTC', label: 'LTC/BTC' },
@@ -60,7 +59,7 @@ const SetStrategy = ({ match }) => {
 
     return (
         <div className="page">
-            <div className="page-header">Add Strategy → {match.params.strategyName.replaceAll("_", " ")}</div>
+            <div className="page-header">S T R A T E G I E S → {match.params.strategyName.replaceAll("_", " ")}</div>
             <section className="big-section" style={{ width: "50%", margin: "0 auto" }}>
                 <span className="section-header">Strategy Configuration</span>
                 <div className="wrapper" style={{ textAlign: "center" }} >
@@ -68,11 +67,12 @@ const SetStrategy = ({ match }) => {
                         <Controller
                             name="currency"
                             control={control}
-                            defaultValue={pairs[0]}
+                            defaultValue={symbols[0]}
                             render={({ onChange }) => (
                                 <Select
-                                    options={pairs}
+                                    options={symbols}
                                     placeholder="Choose coin ..."
+                                    isSearchable
                                     onChange={e => {
                                         onChange(e)
                                         chooseSelected(e)
@@ -81,14 +81,14 @@ const SetStrategy = ({ match }) => {
                                 />)}
                         />
                         <br /><br />
-                        <label>Amount:</label><br/>
+                        <label>Amount:</label><br />
                         <Controller as={NumericInput} name="amount" defaultValue={0} control={control} min={1} max={9999999} step={1}
                             placeholder="Amount ..." format={amountFormat} /> <br /><br />
-<label >Profit target:</label><br/>
-                        <Controller as={NumericInput} name="take_profit" defaultValue={0} control={control} min={3.0} max={10.0} step={0.1}
+                        <label >Profit target:</label><br />
+                        <Controller as={NumericInput} name="take_profit" defaultValue={0} control={control} min={3} max={10} step={1}
                             placeholder="Profit target  ..." format={percentFormat} /> <br /><br />
-                        <label>Stop loss:</label><br/>
-                        <Controller as={NumericInput} name="stop_loss" defaultValue={0} control={control} min={3.0} max={10.0} step={0.1}
+                        <label>Stop loss:</label><br />
+                        <Controller as={NumericInput} name="stop_loss" defaultValue={0} control={control} min={3} max={10} step={1}
                             placeholder="Stoploss  ..." format={percentFormat} /> <br /><br />
 
                         <Button type="submit" variant="contained" size="large" style={{ background: "#1c316d", color: "white" }} startIcon={<AddIcon />}>Add Strategy</Button>

@@ -26,9 +26,12 @@ async function editActiveStrategy(strategy_id) {
     })
 }
 
-const Strategies = () => {
-    const [data, setData] = useState();
+const Strategies = ({ userData }) => {
+    const [activeStrategies, setActiveStrategies] = useState(undefined);
     const [loading, setLoading] = useState(true);
+
+    const [open, setOpen] = useState(false);
+    const closeModal = () => setOpen(false);
 
     useEffect(() => {
         async function getActiveStrategies() {
@@ -37,7 +40,7 @@ const Strategies = () => {
                 withCredentials: 'true'
             })
             res = await res.json();
-            setData(res);
+            setActiveStrategies(res);
             setLoading(false)
         }
 
@@ -45,9 +48,9 @@ const Strategies = () => {
     }, []);
 
 
-    const setStrategyPage = [];
+    const StrategyPage = [];
     strategies.forEach((strategy) => (
-        setStrategyPage.push(strategy.name.replaceAll(" ", "_"))
+        StrategyPage.push(strategy.name.replaceAll(" ", "_"))
     ));
 
     const deleteIconStyle = { position: "absolute", right: "0", zIndex: "1" };
@@ -55,13 +58,20 @@ const Strategies = () => {
 
     function handleDelete(strategy_id) {
         deleteActiveStrategy(strategy_id);
-        setData(data.filter(i => i.strategy_id !== strategy_id))
+        setActiveStrategies(activeStrategies.filter(i => i.strategy_id !== strategy_id))
     }
 
     function handleEdit(strategy_id) {
 
     }
 
+    function handlePremiumPopup(isPremiumStrategy, isPremiumUser) {
+        if (isPremiumStrategy && !isPremiumUser) {
+            console.log("user in not premium");
+            console.log("user isPremium: ", isPremiumUser);
+            setOpen(!open)
+        }
+    }
     const strategiesPage = () => {
         return (
             <div className="page">
@@ -71,10 +81,10 @@ const Strategies = () => {
                     <Grid container spacing={3} justify="center" alignItems="center">
                         <Grid container item xs={12} spacing={3}>
                             {loading ?
-                                <Loading data={data} isLoading={loading} />
+                                <Loading activeStrategies={activeStrategies} isLoading={loading} />
                                 :
-                                data.map((activeStrategy) => (
-                                    <div className="active-strategy" key={activeStrategy.strategy_id}>
+                                activeStrategies.map((activeStrategy) => (
+                                    <div className="active-strategy" key={activeStrategy.strategy_id} style={{ background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8 90%)' }} >
                                         <IconButton aria-label="delete" onClick={() => handleDelete(activeStrategy.strategy_id)}
                                             style={deleteIconStyle}>
                                             <DeleteIcon />
@@ -120,14 +130,30 @@ const Strategies = () => {
                     <Grid container spacing={3} justify="center" alignItems="center">
                         <Grid container item xs={12} spacing={3}>
                             {strategies.map((strategy) => (
-                                <Link to={`Strategies/${setStrategyPage[strategy.id]}`} key={strategy.id}>
-                                    <div className="card" key={strategy.id}>
+                                <Link
+                                    key={strategy.id}
+                                    to={strategy.isPremium && !userData.is_premium ?
+                                        '/Strategies'
+                                        :
+                                        `Strategies/${StrategyPage[strategy.id]}`}
+                                >
+                                    <div className="card" key={strategy.id}
+                                        onClick={() => handlePremiumPopup(strategy.isPremium, userData.is_premium)}>
                                         <div className="card-header">{strategy.name}</div>
                                         <img className="card-image" src={strategy.img} alt={strategy.name} />
                                     </div>
                                 </Link>
                             ))
                             }
+                            <Popup open={open} onClose={closeModal}>
+                                <div className="modal">
+                                    {/* <a className="close" onClick={closeModal}>&times;</a> <br/> */}
+                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni
+                                    omnis delectus nemo, maxime molestiae dolorem numquam mollitia, voluptate
+                                    ea, accusamus excepturi deleniti ratione sapiente! Laudantium, aperiam
+                                    doloribus. Odit, aut.
+                                </div>
+                            </Popup>
                         </Grid>
                     </Grid>
                 </section>
@@ -139,7 +165,7 @@ const Strategies = () => {
     return (
         <div>
             <Switch>
-                {setStrategyPage.map(pageName =>
+                {StrategyPage.map(pageName =>
                     <Route path={("/strategies/" + pageName)} component={SetStrategy} key="setStrategy" />)
                 }
                 <Route path="/strategies" component={strategiesPage} key="strategies" />
