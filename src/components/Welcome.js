@@ -1,5 +1,4 @@
 import React from 'react';
-import 'reactjs-popup/dist/index.css';
 import Button from '@material-ui/core/Button';
 
 
@@ -32,6 +31,19 @@ const Welcome = (props) => {
         width: "fit-content",
     }
 
+    const entryButtonStyle = {
+        background: "#1c316d",
+        color: "white",
+        opacity: "0.8",
+        fontWeight: "bold",
+        padding: "10px",
+        position: "absolute",
+        height: "50px",
+        right: "30px",
+        top: "5px",
+        zIndex:"100"
+    }
+
     const contentStyle = { background: 'white', borderRadius: "10px", width: "300px", border: "0", opacity: ".9" };
     const overlayStyle = { background: 'rgba(0,0,0,0.75)' };
 
@@ -44,13 +56,19 @@ const Welcome = (props) => {
 
             </div>
             <div className="wrapper">
+                <div className="fade-in-fast">
+                    <Button onClick={routeChange} size="large" variant="contained" style={entryButtonStyle}>
+                        <pre style={{ fontSize: "16px" }}><p style={{ fontSize: "12px" }}>Login / Register with</p>
+                                GOOGLE</pre>
+                    </Button>
+                </div>
                 <div style={centerDivStyle}>
                     <h1 style={welcomePageH1} className="slide-up">Auto Crypto Trading & Analysis</h1><br />
                     <pre style={welcomePageParagraph} className="fade-in-slow">
                         Manage your cryptocurrency portfolio easily
                     </pre>
 
-                    <div style={{ display: "flex", gap: "20px", marginTop: "30px", height: "50px" }} className="fade-in-slow">
+                    {/* 
                         {/* <Button onClick={() => (<Redirect to="/login" />)} size="large" variant="contained" style={{ background: "#1c316d", color: "white", opacity: "0.8" }}>
                             New LOGIN
                         </Button>
@@ -62,11 +80,8 @@ const Welcome = (props) => {
 
                             <SignUp />
                         </Popup> */}
-                        <Button onClick={routeChange} size="large" variant="contained" style={{ background: "#1c316d", color: "white", opacity: "0.8", fontWeight: "bold", padding: "10px" }}>
-                            <pre style={{ fontSize: "16px" }}><p style={{ fontSize: "10px" }}>Login / Register with</p>
-                                GOOGLE</pre>
-                        </Button>
-                    </div>
+
+                    {/* </div> */}
                 </div>
             </div>
             <style type="text/css">

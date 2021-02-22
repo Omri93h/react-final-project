@@ -3,7 +3,6 @@ import React from 'react';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Nav from './components/Nav';
-import Footer from './components/Footer';
 import Strategies from './components/Strategies';
 import Settings from './components/Settings';
 import Welcome from './components/Welcome';
@@ -13,6 +12,9 @@ import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import PageError from './components/PageError'
 import { useState, useEffect } from 'react';
 import Login from './components/Login';
+import ManualOrder from './components/ManualOrder';
+import Premium from './components/Premium'
+// import Footer from './components/Footer';
 
 async function testConnection() {
   fetch('http://localhost:8080/api/binance/connect', {
@@ -35,7 +37,7 @@ async function getUser(setAuth, setHasBinanceAPI, setThumbnailUrl) {
     }
     setAuth(true);
 
-    return userData.username;
+    return userData;
   }
   catch {
     setAuth(false);
@@ -45,20 +47,29 @@ async function getUser(setAuth, setHasBinanceAPI, setThumbnailUrl) {
 
 function App() {
   const location = useLocation();
+
   const [thumbnailUrl, setThumbnailUrl] = useState(null);
   const [isAuthorized, setAuth] = useState(false);
   const [hasBinanceAPI, setHasBinanceAPI] = useState(false);
+  const [userData, setUserData] = useState(undefined);
+  const [userBalance, setUserBalance] = useState(undefined);
+  const [userOrders, setUserOrders] = useState("");
+  const [userTotal, setUserTotal] = useState({ BTC: 0, USD: 0 });
+
   const authorization = { isAuthorized, setAuth };
+  const balance = { userBalance, setUserBalance };
+  const orders = { userOrders, setUserOrders };
+  const totalValue = { userTotal, setUserTotal };
 
   useEffect(() => {
     (async function Fetch() {
-      const username = await getUser(setAuth, setHasBinanceAPI, setThumbnailUrl);
-      setUserName(username)
+      const data = await getUser(setAuth, setHasBinanceAPI, setThumbnailUrl);
+      setUserData(data)
     })();
   }, []);
 
-  const [userName, setUserName] = useState("");
-  const userControl = { userName, setUserName }
+
+  const userControl = { userData, setUserData }
 
   return (
     <div className="App">
@@ -66,7 +77,9 @@ function App() {
         isAuthorized ?
           (
             <>
-              <Header authorization={authorization} username={userName} thumbnail={thumbnailUrl} />
+              <Header authorization={authorization} username={
+                userData ? userData.username : ""} thumbnail={thumbnailUrl}
+              />
               {
                 hasBinanceAPI ?
                   <>
@@ -81,11 +94,17 @@ function App() {
                             <CSSTransition key={location.pathname} timeout={400} classNames="fade">
 
                               <Switch location={location} name="logged-in">
-                                <Route exact path="/" render={() => (<Redirect to="/Dashboard" />)} />
-                                <Route path="/dashboard" component={Dashboard} />
-                                <Route exact path="/strategies" component={Strategies} />
+                                <Route exact path="/" render={() => (
+                                  <Redirect to="/Dashboard" balance={balance} orders={orders} totalValue={totalValue} />)}
+                                />
+                                <Route path="/dashboard" render={() => (
+                                  <Dashboard balance={balance} orders={orders} totalValue={totalValue} />
+                                )} />
+                                <Route exact path="/strategies" render={() => <Strategies userData={userData} />} />
                                 <Route path="/settings" component={Settings} />
+                                <Route path="/Manual_Order" component={ManualOrder} />
                                 <Route path="/strategies/:strategyName" component={SetStrategy} />
+                                <Route path="/Premium" component={Premium} />
                                 <Route path='*' component={PageError} />
                               </Switch>
 
@@ -94,7 +113,7 @@ function App() {
                           </TransitionGroup>
 
                         </div>
-                        <Footer />
+                        {/* <Footer /> */}
 
                       </main>
 
@@ -112,7 +131,7 @@ function App() {
           :
           (
             <>
-              <Header authorization={authorization} username={userName} thumbnail={thumbnailUrl} />
+              <Header authorization={authorization} username={userData ? userData.username : ""} thumbnail={thumbnailUrl} />
 
               <Switch name="not-logged-in">
                 <React.Fragment>

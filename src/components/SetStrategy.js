@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 import { useForm, Controller } from 'react-hook-form';
+import strategies from './../data/strategies.json'
 import NumericInput from 'react-numeric-input';
 import AddIcon from '@material-ui/icons/Add';
-
 import { Button } from "@material-ui/core";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 
-
-const pairs = [
+const symbols = [
     { value: 'DOGEBTC', label: 'DOGE/BTC' },
     { value: 'ETHBTC', label: 'ETH/BTC' },
     { value: 'LTCBTC', label: 'LTC/BTC' },
@@ -29,21 +31,28 @@ async function addStrategy(data) {
 
 
 const SetStrategy = ({ match }) => {
-    const { control, handleSubmit } = useForm();
-    const onSubmit = async (data) => {
-        data.strategy_type = match.params.strategyName;
-        data.currency = data.currency.value
-        console.log(data);
-        await addStrategy(data)
-    }
+    const [isPopupOpen, setOpen] = useState(false);
+    const closeModal = () => setOpen(false);
 
     const [selected, setSelected] = useState();
+    const { control, handleSubmit } = useForm();
+    const onSubmit = async (data) => {
+        data.strategy_type = match.params.strategyName.replaceAll("_", " ");
+        data.currency = data.currency.value;
+        await addStrategy(data);
+        handleSubmitPopup();
+    }
+
+    function handleSubmitPopup() {
+        setOpen(!isPopupOpen);
+        console.log("pop up?")
+    }
+
+
 
     function chooseSelected(opt) {
         setSelected(opt);
     }
-
-    // const strategy_name = match.params.strategyName;
 
 
     function percentFormat(num) {
@@ -60,7 +69,7 @@ const SetStrategy = ({ match }) => {
 
     return (
         <div className="page">
-            <div className="page-header">Add Strategy → {match.params.strategyName.replaceAll("_", " ")}</div>
+            <div className="page-header">S T R A T E G I E S → {match.params.strategyName.replaceAll("_", " ")}</div>
             <section className="big-section" style={{ width: "50%", margin: "0 auto" }}>
                 <span className="section-header">Strategy Configuration</span>
                 <div className="wrapper" style={{ textAlign: "center" }} >
@@ -68,11 +77,12 @@ const SetStrategy = ({ match }) => {
                         <Controller
                             name="currency"
                             control={control}
-                            defaultValue={pairs[0]}
+                            defaultValue={symbols[0]}
                             render={({ onChange }) => (
                                 <Select
-                                    options={pairs}
+                                    options={symbols}
                                     placeholder="Choose coin ..."
+                                    isSearchable
                                     onChange={e => {
                                         onChange(e)
                                         chooseSelected(e)
@@ -81,20 +91,28 @@ const SetStrategy = ({ match }) => {
                                 />)}
                         />
                         <br /><br />
-                        <label>Amount:</label><br/>
+                        <label>Amount:</label><br />
                         <Controller as={NumericInput} name="amount" defaultValue={0} control={control} min={1} max={9999999} step={1}
                             placeholder="Amount ..." format={amountFormat} /> <br /><br />
-<label >Profit target:</label><br/>
-                        <Controller as={NumericInput} name="take_profit" defaultValue={0} control={control} min={3.0} max={10.0} step={0.1}
+                        <label >Profit target:</label><br />
+                        <Controller as={NumericInput} name="take_profit" defaultValue={0} control={control} min={3} max={10} step={1}
                             placeholder="Profit target  ..." format={percentFormat} /> <br /><br />
-                        <label>Stop loss:</label><br/>
-                        <Controller as={NumericInput} name="stop_loss" defaultValue={0} control={control} min={3.0} max={10.0} step={0.1}
+                        <label>Stop loss:</label><br />
+                        <Controller as={NumericInput} name="stop_loss" defaultValue={0} control={control} min={3} max={10} step={1}
                             placeholder="Stoploss  ..." format={percentFormat} /> <br /><br />
-
-                        <Button type="submit" variant="contained" size="large" style={{ background: "#1c316d", color: "white" }} startIcon={<AddIcon />}>Add Strategy</Button>
-
+                        <Button type="submit" variant="contained" size="large"
+                            style={{ background: "#1c316d", color: "white" }}
+                            startIcon={<AddIcon />}>
+                            Add Strategy
+                         </Button>
                     </form>
-
+                    <Popup open={isPopupOpen} closeOnDocumentClick onClose={closeModal}>
+                        <div className="modal">
+                            <a className="close" onClick={closeModal}>&times;</a>
+                            <AssignmentTurnedInIcon style={{ fontSize: 80, color: "green" }} /><br />
+                                    New strategy added successfully !
+                            </div>
+                    </Popup>
                 </div>
             </section>
         </div >

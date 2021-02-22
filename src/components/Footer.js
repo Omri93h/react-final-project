@@ -7,10 +7,9 @@ const Footer = () => {
     return (
         <footer>
             <CopyrightIcon />
-            <p>2021  Tsibulsky David & Haham Omri<br/>
-            <b>All rights reserved</b>
+            <p>2021  Tsibulsky David & Haham Omri<br />
+                <b>All rights reserved</b>
             </p>
-        
         </footer>
     )
 }

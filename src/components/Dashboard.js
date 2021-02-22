@@ -1,166 +1,207 @@
 import PieChart from './PieChart';
 import { useState, useEffect } from 'react';
 import Loading from './Loading';
+import btcIcon from 'cryptocurrency-icons/32/icon/btc.png'
+import RefreshIcon from '@material-ui/icons/Refresh';
+import { IconButton } from '@material-ui/core';
+import CancelIcon from '@material-ui/icons/Cancel';
 
-
-const Dashboard = () => {
-    const [data, setData] = useState(null);
+const Dashboard = ({ balance, orders, totalValue }) => {
     const [loading, setLoading] = useState(true);
+    const [refresh, setRefresh] = useState(false);
 
-    // useEffect with an empty dependency array works the same way as componentDidMount
     useEffect(() => {
-        async function fetchData() {
-            let url = 'http://localhost:8080/api/portfolio/';
-            let response = await fetch(url, {
+        async function getBalance() {
+            const url = 'http://localhost:8080/api/portfolio/';
+            const response = await fetch(url, {
                 credentials: 'include',
                 withCredentials: 'true'
             });
-            let commits = await response.json();
-
+            const balance = await response.json();
             const data = []
-            for (const i in commits) {
-                if (commits[i].id === 'BTC') {
-                    commits[i].amount = Number(commits[i].amount).toFixed(6)
-                } else {
-                    commits[i].amount = Number(commits[i].amount).toFixed(3)
-                }
+            for (const i in balance) {
+                balance[i].id === 'BTC' ?
+                    balance[i].amount = parseFloat(Number(balance[i].amount).toFixed(5))
+                    :
+                    balance[i].amount = parseFloat(Number(balance[i].amount).toFixed(3))
+
+                const currCoinValue = balance[i].value.toFixed(1)
+
                 data.push({
-                    "id": commits[i].id, "label": commits[i].id + " " + commits[i].amount,
-                    "amount": commits[i].amount, "value": commits[i].value.toFixed(1)
+                    "id": balance[i].id, "label": balance[i].id + " (" + balance[i].amount + ")",
+                    "amount": balance[i].amount, "value": currCoinValue,
                 })
             }
             return data;
         }
-        async function Init() {
+
+        async function getTotalValue(balance) {
+            const url = 'http://localhost:8080/api/binance/getBTCUSD';
+            const response = await fetch(url, {
+                credentials: 'include',
+                withCredentials: 'true'
+            });
+            const btcPrice = await response.json();
+            const userTotalValue = { USD: 0, BTC: 0 };
+            for (const i in balance) {
+                userTotalValue.USD += Number(balance[i].value)
+            }
+            userTotalValue.USD = userTotalValue.USD.toFixed(1);
+            userTotalValue.BTC = (userTotalValue.USD / btcPrice).toFixed(5);
+            return userTotalValue;
+        }
+
+        async function getOrders() {
+            const url = 'http://localhost:8080/api/orders';
+            const response = await fetch(url, {
+                credentials: 'include',
+                withCredentials: 'true'
+            });
+            const userOrders = await response.json();
+            return userOrders;
+        }
+
+        async function userData() {
             try {
-                // set loading to true before calling API
+                let userCurrentBalance = balance.userBalance;
+                let userOrders = null;
+                let total = 0;
                 setLoading(true);
-                const data = await fetchData();
-                setData(data);
-                // switch loading to false after fetch is complete
+                if (!balance.userBalance || refresh) {
+                    userCurrentBalance = await getBalance();
+                    balance.setUserBalance(userCurrentBalance);
+                    userOrders = await getOrders();
+                    orders.setUserOrders(userOrders);
+                    total = await getTotalValue(userCurrentBalance);
+                    totalValue.setUserTotal(total);
+                }
                 setLoading(false);
             } catch (error) {
-                // add error handling here
                 setLoading(false);
+                return (<div>"ERROR LOADING"</div>)
             }
         }
-        Init();
-    }, []);
+
+        (async function refreshBalance() {
+            if (refresh) {
+                await userData();
+                setRefresh(false)
+            }
+        })()
+
+        userData();
+    }, [refresh]);
 
     const positionsDataStyle = {
         marginTop: "10px",
         display: "table",
         width: "100%",
-
     }
 
     const tableCell = {
+        height: "30px",
         display: "table-cell",
         textAlign: "center",
-        height: "auto",
-        paddingBottom: "5px",
-        maxWidth: "30px"
+        maxWidth: "40px",
+    }
+
+    const orderDataStyle = {
+        lineHeight: "24px",
+        fontSize: "18px"
     }
 
     return (
         <div className="page">
-            <div className="page-header">D A S H B O A R D</div>
+            <span className="page-header">D A S H B O A R D</span>
             <div className="section-row">
                 <section className="small-section">
-                    <span className="section-header">Currenger Balance</span>
+                    <div className="section-header" style={{ display: "flex", justifyContent: "space-between" }}>
+                        <span>Currenger Balance</span>
+                        <IconButton style={{ width: "18px", marginTop: "-3px" }} onClick={() => setRefresh(true)}>
+                            <RefreshIcon style={{ width: "18px" }} />
+                        </IconButton>
+                    </div>
                     {loading ?
-                        <Loading data={data} isLoading={loading} />
+                        <Loading data={balance.userBalance} isLoading={loading} />
                         :
-                        <div className="fade-in-fast" style={{ display: "flex", justifyContent: "space-between", alignItems: "center", position: "relative" }}>
-                            <div style={{ height: "120px", width: "80px" }}>
-                                <span style={{ fontSize: "18px", fontWeight: "bold" }}>TOTAL:</span><br /><br />
-                                <span style={{ fontSize: "16px" }}>0.000000 BTC</span> <br />
-                                <span style={{ fontSize: "11px" }}>0000000 <>$</></span>
+                        <div className="fade-in-fast">
+                            <div style={{ margin: "0 auto", height: "180px", display: "block", maxWidth: "360px", marginTop: "10px" }}>
+                                <PieChart data={balance.userBalance} />
                             </div>
-                            <div style={{ height: "140px", width: "200px", marginTop: "20px" }}>
-                                <PieChart data={data} />
+                        </div>
+                    }
+                </section>
+
+                <section className="small-section">
+                    <span className="section-header">Total Value</span>
+                    {loading || !(totalValue.userTotal.BTC) ?
+                        <Loading data={balance.userBalance} isLoading={loading} />
+                        :
+                        <div className="fade-in-fast" style={{ textAlign: "center", marginTop: "45px" }}>
+                            <div style={{ fontSize: "40px", display: "flex", alignItems: "center", width: "100%", justifyContent: "center" }}>
+                                <span><b>{totalValue.userTotal.BTC}</b> </span>
+                                <img src={btcIcon} alt="btc-icon" />
                             </div>
+                            <span style={{ fontSize: "25px", fontWeight: "lighter" }}>
+                                ≈ <br />{totalValue.userTotal.USD}$
+                            </span>
                         </div>
                     }
 
                 </section>
-
-                <section className="small-section" >
-                    <span className="section-header">Stats</span>
-                    <div className="stats-data" style={positionsDataStyle}>
-                        <div id="daily-stat" style={tableCell}>
-                            <span className="table-cell-header" >Daily</span>
-                        </div>
-                        <div id="weekly-stat" style={tableCell}>
-                            <span className="table-cell-header" >Weekly</span>
-                        </div>
-                        <div id="monthly-stat" style={tableCell}>
-                            <span className="table-cell-header" >Montly</span>
-                        </div>
-                        <div id="alltime-stat" style={tableCell}>
-                            <span className="table-cell-header" >All Time</span>
-                        </div>
-                    </div>
-                </section>
             </div>
 
             <section className="big-section">
-                <span className="section-header">Positions </span>
-                <div className="stats-data" style={positionsDataStyle}>
-                    <div id="asset" style={tableCell}>
-                        <div className="table-cell-header" >Asset</div>
-                        {/* ... */}
-                    </div>
-                    <div id="amount" style={tableCell}>
-                        <div className="table-cell-header">Amount</div>
-                        {/* ... */}
-                    </div>
-                    <div id="price" style={tableCell}>
-                        <div className="table-cell-header">Price</div>
-                        {/* ... */}
-                    </div>
-                    <div id="profit" style={tableCell}>
-                        <div className="table-cell-header">Profit</div>
-                        {/* ... */}
-                    </div>
-                    <div id="age" style={tableCell}>
-                        <div className="table-cell-header">Age</div>
-                        {/* ... */}
-                    </div>
-                    <div id="strategy" style={tableCell}>
-                        <div className="table-cell-header">Strategy</div>
-                        {/* ... */}
-                    </div>
-                </div>
-            </section>
-
-            <section className="big-section">
                 <span className="section-header">Open Orders</span>
-                <div className="open-orders-data" style={positionsDataStyle}>
-                    <div id="asset" style={tableCell}>
-                        <div className="table-cell-header" >Asset</div>
-                        {/* ... */}
+
+                {orders.userOrders ?
+
+                    <div className="fade-in-fast" style={positionsDataStyle}>
+                        <div id="symbol" style={tableCell}>
+                            <div className="table-cell-header" >Symbol</div> {
+                                orders.userOrders.map(order => (<div style={orderDataStyle} key={order.id}> {order.symbol}</div>))}
+                        </div>
+                        <div id="amount" style={tableCell}>
+                            <div className="table-cell-header">Amount</div>
+                            {orders.userOrders.map(order => (<div style={orderDataStyle} key={order.id}> {parseFloat(order.origQty)}</div>))}
+                        </div>
+                        <div id="action" style={tableCell}>
+                            <div className="table-cell-header">Action</div>
+                            {orders.userOrders.map(order => (
+                                <div key={order.id} style={orderDataStyle}>
+                                    <span style={order.side === "BUY" ? { color: "green" } : { color: "red" }}>{order.side}</span>
+                                </div>
+                            ))}
+                        </div>
+                        <div id="price" style={tableCell} >
+                            <div className="table-cell-header">Price</div>
+                            {orders.userOrders.map(order => (
+                                <div style={orderDataStyle} key={order.id}> {order.price}</div>))}
+                        </div>
+                        <div id="status" style={tableCell}>
+                            <div className="table-cell-header">Status</div>
+                            {orders.userOrders.map(order => (
+                                <div style={orderDataStyle} key={order.id}> {order.status}</div>
+                            ))}
+                        </div>
+                        <div id="cancel" style={tableCell}>
+                            <div className="table-cell-header">Cancel</div>
+                            {orders.userOrders.map(order => (
+                                <div style={orderDataStyle} key={order.id}>
+                                    <CancelIcon
+                                        style={{ height: "20px", color: "red" }}
+                                        variant="contained"
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                    <div id="amount" style={tableCell}>
-                        <div className="table-cell-header">Amount</div>
-                        {/* ... */}
-                    </div>
-                    <div id="buy-or-sell" style={tableCell}>
-                        <div className="table-cell-header">Buy / Sell</div>
-                        {/* ... */}
-                    </div>
-                    <div id="expected-return" style={tableCell}>
-                        <div className="table-cell-header">Expected Return</div>
-                        {/* ... */}
-                    </div>
-                    <div id="action" style={tableCell}>
-                        <div className="table-cell-header">Action</div>
-                        {/* ... */}
-                    </div>
-                </div>
+                    :
+                    ""}
+
             </section>
 
-        </div>
+        </div >
     )
 }
 

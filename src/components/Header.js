@@ -2,23 +2,21 @@ import { Link } from 'react-router-dom';
 import Button from '@material-ui/core/Button';
 
 
-async function logOut(props) {
-    fetch('http://localhost:8080/auth/logout', {
-        credentials: 'include',
-        withCredentials: 'true'
-    })
-        .then(props.authorization.setAuth(false))
-        .then(data => console.log(data)) // Manipulate the data retrieved back, if we want to do something with it
-        .catch(err => console.log(err)) // Do something with the error
-}
+
 
 const Header = (props) => {
     const smallLogo = process.env.PUBLIC_URL + '/img/logo_header.png';
     const defaultProfileIcon = process.env.PUBLIC_URL + '/img/icon_profile.png';
 
-    async function logOutUser() {
-        await logOut(props)
+    async function logOutUser(props) {
+        await fetch('http://localhost:8080/auth/logout/', {
+            credentials: 'include',
+        })
+            .then(props.authorization.setAuth(false))
+            .then(data => console.log(data)) // Manipulate the data retrieved back, if we want to do something with it
+            .catch(err => console.log(err)) // Do something with the error
     }
+
     //left side styles
     const appLogoStyle = {
         background: `url(${smallLogo}) no-repeat left center`,
@@ -28,7 +26,7 @@ const Header = (props) => {
     const appNameStyle = {
         color: "white",
         marginLeft: "60px",
-        textShadow: "1px 1px 4px #111"
+        textShadow: "1px 1px 1px #111"
     }
 
     //right side styles
@@ -57,8 +55,8 @@ const Header = (props) => {
         <>
             <div style={ProfileIconStyle}></div>
             <div style={userNameStyle}>{props.username}<br />
-                <div style={{ marginRight: "20px",width:"", position: "absolute", top: "15px",textAlign:"left"}}>
-                    <Button onClick={() => { logOutUser() }} size="small" style={{ fontSize: "11px", color: "gray", margin:"0", padding:"0", textAlign:"left" }}>Log out </Button>
+                <div style={{ marginRight: "20px", width: "", position: "absolute", top: "15px", textAlign: "left" }}>
+                    <Button onClick={() => { logOutUser(props) }} size="small" style={{ fontSize: "11px", color: "gray", margin: "0", padding: "0", textAlign: "left" }}>Log out </Button>
                 </div>
             </div>
 
