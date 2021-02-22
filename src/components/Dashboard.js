@@ -137,13 +137,13 @@ const Dashboard = ({ balance, orders, totalValue }) => {
                     {loading || !(totalValue.userTotal.BTC) ?
                         <Loading data={balance.userBalance} isLoading={loading} />
                         :
-                        <div className="fade-in-fast" style={{ textAlign: "center", marginTop: "45px" }}>
+                        <div className="fade-in-fast" style={{ textAlign: "center", marginTop: "50px" }}>
                             <div style={{ fontSize: "40px", display: "flex", alignItems: "center", width: "100%", justifyContent: "center" }}>
                                 <span><b>{totalValue.userTotal.BTC}</b> </span>
                                 <img src={btcIcon} alt="btc-icon" />
                             </div>
                             <span style={{ fontSize: "25px", fontWeight: "lighter" }}>
-                                ≈ <br />{totalValue.userTotal.USD}$
+                                ≈ {totalValue.userTotal.USD}$
                             </span>
                         </div>
                     }

@@ -48,8 +48,6 @@ const SetStrategy = ({ match }) => {
         console.log("pop up?")
     }
 
-
-
     function chooseSelected(opt) {
         setSelected(opt);
     }
@@ -58,7 +56,7 @@ const SetStrategy = ({ match }) => {
     function percentFormat(num) {
         return num + '%'
     }
-
+    
     function amountFormat(num) {
         if (!selected) {
             return "0"
@@ -110,7 +108,7 @@ const SetStrategy = ({ match }) => {
                         <div className="modal">
                             <a className="close" onClick={closeModal}>&times;</a>
                             <AssignmentTurnedInIcon style={{ fontSize: 80, color: "green" }} /><br />
-                                    New strategy added successfully !
+                                    <span style={{color:"green"}}>New strategy added successfully !</span>
                             </div>
                     </Popup>
                 </div>
