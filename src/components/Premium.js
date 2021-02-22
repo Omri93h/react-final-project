@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 import StarIcon from '@material-ui/icons/Star';
 
 async function insertPremium(data) {
-    fetch('http://localhost:8080/profile/setPremium', {
+    fetch('https://davidomriproject.herokuapp.com/profile/setPremium', {
         method: 'PUT',
         credentials: 'include',
         body: JSON.stringify(data),

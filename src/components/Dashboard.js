@@ -12,7 +12,7 @@ const Dashboard = ({ balance, orders, totalValue }) => {
 
     useEffect(() => {
         async function getBalance() {
-            const url = 'http://localhost:8080/api/portfolio/';
+            const url = 'https://davidomriproject.herokuapp.com/api/portfolio/';
             const response = await fetch(url, {
                 credentials: 'include',
                 withCredentials: 'true'
@@ -36,7 +36,7 @@ const Dashboard = ({ balance, orders, totalValue }) => {
         }
 
         async function getTotalValue(balance) {
-            const url = 'http://localhost:8080/api/binance/getBTCUSD';
+            const url = 'https://davidomriproject.herokuapp.com/api/binance/getBTCUSD';
             const response = await fetch(url, {
                 credentials: 'include',
                 withCredentials: 'true'
@@ -52,7 +52,7 @@ const Dashboard = ({ balance, orders, totalValue }) => {
         }
 
         async function getOrders() {
-            const url = 'http://localhost:8080/api/orders';
+            const url = 'https://davidomriproject.herokuapp.com/api/orders';
             const response = await fetch(url, {
                 credentials: 'include',
                 withCredentials: 'true'
@@ -137,13 +137,13 @@ const Dashboard = ({ balance, orders, totalValue }) => {
                     {loading || !(totalValue.userTotal.BTC) ?
                         <Loading data={balance.userBalance} isLoading={loading} />
                         :
-                        <div className="fade-in-fast" style={{ textAlign: "center", marginTop: "45px" }}>
+                        <div className="fade-in-fast" style={{ textAlign: "center", marginTop: "50px" }}>
                             <div style={{ fontSize: "40px", display: "flex", alignItems: "center", width: "100%", justifyContent: "center" }}>
                                 <span><b>{totalValue.userTotal.BTC}</b> </span>
                                 <img src={btcIcon} alt="btc-icon" />
                             </div>
                             <span style={{ fontSize: "25px", fontWeight: "lighter" }}>
-                                ≈ <br />{totalValue.userTotal.USD}$
+                                ≈ {totalValue.userTotal.USD}$
                             </span>
                         </div>
                     }

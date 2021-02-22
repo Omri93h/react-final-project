@@ -2,11 +2,10 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import { useForm, Controller } from 'react-hook-form';
 import { Input } from '@material-ui/core';
-import { useHistory } from 'react-router-dom';
 
-async function insertData(data) {
+async function insertUserApi(data) {
     var new_data = { binance_key: data.binance_key, binance_private: data.binance_private };
-    fetch('http://localhost:8080/profile/', {
+    fetch('https://davidomriproject.herokuapp.com/profile/', {
         method: 'PUT',
         body: JSON.stringify(new_data),
         headers: {
@@ -15,8 +14,8 @@ async function insertData(data) {
         credentials: 'include',
         withCredentials: 'true'
     })
-        .then(data => console.log(data)) // Manipulate the data retrieved back, if we want to do something with it
-        .catch(err => console.log(err)) // Do something with the error
+        .then(data => console.log(data)) 
+        .catch(err => console.log(err)) 
 }
 
 export const loginButton = (
@@ -26,15 +25,11 @@ export const loginButton = (
 )
 
 const Login = (props) => {
-    let history = useHistory();
     console.log(props);
     const { control, handleSubmit } = useForm();
     const onSubmit = (data) => {
-        console.log(data);
-
-        console.log("HISTORY:", history)
         async function insert(data) {
-            await insertData(data);
+            await insertUserApi(data);
         }
         insert(data);
         props.setHasBinanceAPI(true);

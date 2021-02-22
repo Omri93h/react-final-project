@@ -11,25 +11,33 @@ import EditIcon from '@material-ui/icons/Edit';
 import AssignmentLateIcon from '@material-ui/icons/AssignmentLate';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
+import { useForm, Controller } from 'react-hook-form';
+import NumericInput from 'react-numeric-input';
+
 
 async function deleteActiveStrategy(strategy_id) {
-    await fetch(`http://localhost:8080/api/strategy/${strategy_id}`, {
+    await fetch(`https://davidomriproject.herokuapp.com/api/strategy/${strategy_id}`, {
         method: "DELETE",
         credentials: 'include',
         withCredentials: 'true'
     })
 }
 
-async function editActiveStrategy(strategy_id) {
-    await fetch(`http://localhost:8080/api/strategy/${strategy_id}`, {
+async function editActiveStrategy(strategy) {
+    await fetch(`https://davidomriproject.herokuapp.com/api/strategy/${strategy.id}`, {
         method: "PUT",
         credentials: 'include',
-        withCredentials: 'true'
+        withCredentials: 'true',
+        body: JSON.stringify(strategy),
+        headers: {
+            'Content-Type': 'application/json'
+        }
     })
+        .then(data => console.log(data))
 }
 
 async function getActiveStrategies(setLoading, setActiveStrategies) {
-    let res = await fetch('http://localhost:8080/api/strategy', {
+    let res = await fetch('https://davidomriproject.herokuapp.com/api/strategy', {
         credentials: 'include',
         withCredentials: 'true'
     })
@@ -42,14 +50,14 @@ const Strategies = ({ userData }) => {
     const [activeStrategies, setActiveStrategies] = useState(undefined);
     const [loading, setLoading] = useState(true);
 
+    const [currentStrategyId, setCurrentStrategyId] = useState(undefined);
+    const [currentStrategyName, setCurrentStrategyName] = useState("");
+    const [currentStrategyType, setCurrentStrategyType] = useState("");
     const [isPremiumPopup, setPremiumPopup] = useState(false);
-    const [isDetDeleteVerifyPopup, setDeleteVerifyPopup] = useState(false);
-    const [strategyToDelete, setStrategyToDelete] = useState(null);
+    const [isDeleteVerifyPopup, setDeleteVerifyPopup] = useState(false);
+    const [isEditPopup, setEditPopup] = useState(false);
 
-    const closeModal = () => {
-        setPremiumPopup(false);
-        setDeleteVerifyPopup(false);
-    }
+    const { control, handleSubmit } = useForm();
 
     useEffect(() => {
         setLoading(true);
@@ -57,14 +65,27 @@ const Strategies = ({ userData }) => {
         getActiveStrategies(setLoading, setActiveStrategies);
     }, []);
 
+    const onSubmit = async (data) => {
+        setEditPopup(false)
+        data.id = currentStrategyId;
+        editActiveStrategy(data);
+        getActiveStrategies(setLoading, setActiveStrategies);
+    }
+
+    const closeModal = () => {
+        setPremiumPopup(false);
+        setDeleteVerifyPopup(false);
+        setEditPopup(false);
+    }
+
     const StrategyPage = [];
     strategies.forEach((strategy) => (
         StrategyPage.push(strategy.name.replaceAll(" ", "_"))
     ));
 
     function handleDeleteVerifyPopup(strategy_id) {
-        setDeleteVerifyPopup(!isDetDeleteVerifyPopup);
-        setStrategyToDelete(strategy_id);
+        setDeleteVerifyPopup(!isDeleteVerifyPopup);
+        setCurrentStrategyId(strategy_id);
     }
 
     function handleDelete(strategy_id) {
@@ -72,9 +93,25 @@ const Strategies = ({ userData }) => {
         setActiveStrategies(activeStrategies.filter(i => i.strategy_id !== strategy_id))
     }
 
-    function handleEdit(strategy_id) {
-        console.log(strategy_id);
+    function handleEditPopup(strategy_id) {
+        setEditPopup(!isEditPopup);
+        setCurrentStrategyId(strategy_id);
     }
+
+    // function handleEdit() {
+    //     console.log("EDIT");
+    //     const strategy = {
+    //         id: currentStrategyId,
+    //         amount: 30,
+    //         stop_loss: 6,
+    //         take_profit: 7
+    //     }
+    //     console.log(strategy);
+
+    //     // setActiveStrategies(activeStrategies.filter(i => i.strategy_id !== strategy_id))
+    // }
+
+
 
     function handlePremiumPopup(isPremiumStrategy, isPremiumUser) {
         if (isPremiumStrategy && !isPremiumUser) {
@@ -82,7 +119,14 @@ const Strategies = ({ userData }) => {
         }
     }
 
+    function amountFormat(num) {
+        const currency = `${currentStrategyName}`.slice(0, -3);
+        return (num + " " + currency);
+    }
 
+    function percentFormat(num) {
+        return num + '%'
+    }
 
     const deleteIconStyle = { position: "absolute", right: "0", zIndex: "1" };
     const editIconStyle = { position: "absolute", left: "0", zIndex: "1" };
@@ -108,27 +152,22 @@ const Strategies = ({ userData }) => {
                                 :
                                 activeStrategies.map((activeStrategy) => (
                                     <div className="active-strategy" key={activeStrategy.strategy_id}>
-                                        <IconButton aria-label="delete" onClick={() =>
-                                            handleDeleteVerifyPopup(activeStrategy.strategy_id)}
+                                        <IconButton aria-label="delete" onClick={() => {
+                                            handleDeleteVerifyPopup(activeStrategy.strategy_id)
+                                            setCurrentStrategyName(activeStrategy.currency);
+                                            setCurrentStrategyType(activeStrategy.strategy_type);
+                                        }}
                                             style={deleteIconStyle}>
                                             <DeleteIcon />
                                         </IconButton>
-
-                                        <Popup modal
-                                            trigger={<IconButton
-                                                aria-label="edit"
-                                                onClick={() => handleEdit(activeStrategy.strategy_id)}
-                                                style={editIconStyle}>
-                                                <EditIcon />
-                                            </IconButton>}>
-                                            <form style={{ fontFamily: 'ubuntu' }}>
-                                                <label>Profit </label>
-                                                <input type="number" name="take_profit" /> <br />
-                                                <label>stop loss </label>
-                                                <input type="number" name="stop_loss" /> <br />
-                                                <input type="submit" value="submit" />
-                                            </form>
-                                        </Popup>
+                                        <IconButton aria-label="edit" onClick={() => {
+                                            handleEditPopup(activeStrategy.strategy_id)
+                                            setCurrentStrategyName(activeStrategy.currency);
+                                            setCurrentStrategyType(activeStrategy.strategy_type);
+                                        }}
+                                            style={editIconStyle}>
+                                            <EditIcon />
+                                        </IconButton>
 
                                         <div className="card-header"> {activeStrategy.currency}</div>
                                         <div className="card-content"
@@ -178,7 +217,7 @@ const Strategies = ({ userData }) => {
                             }
                             <Popup open={isPremiumPopup} onClose={closeModal}>
                                 <div className="modal">
-                                    <a className="close" onClick={closeModal}>&times;</a> <br />
+                                    <a className="close" onClick={closeModal}></a> <br />
                                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni
                                     omnis delectus nemo, maxime molestiae dolorem numquam mollitia, voluptate
                                     ea, accusamus excepturi deleniti ratione sapiente! Laudantium, aperiam
@@ -189,38 +228,93 @@ const Strategies = ({ userData }) => {
                     </Grid>
                 </section>
 
-                <Popup open={isDetDeleteVerifyPopup} closeOnDocumentClick onClose={closeModal}>
+                <Popup open={isDeleteVerifyPopup} closeOnDocumentClick onClose={(closeModal) => setDeleteVerifyPopup(false)}>
                     <div className="modal">
-                        <a className="close" onClick={closeModal}>&times;</a>
+                        <a className="close" onClick={closeModal}></a>
                         <AssignmentLateIcon style={{ fontSize: 80, color: "orange" }} /><br />
                         <span style={{ color: "#888" }}>
                             Delete this strategy?
                             </span>
                         <br />
+
                         <div style={{ margin: "50px 0px 20px 0px", display: "flex", justifyContent: "space-around" }}>
                             <Button
                                 variant="contained"
-                                style={{ background: "green", color: "white" }}
+                                style={{ background: "#435279", color: "white" }}
                                 onClick={() => {
-                                    handleDelete(strategyToDelete)
+                                    handleDelete(currentStrategyId)
                                     setDeleteVerifyPopup(false)
                                 }}>
                                 Yes, Delete it
-                        </Button>
-                        &nbsp;
-                        <Button 
-                        variant="contained"
-                        style={{ background: "red", color: "white" }}
-                         onClick={() =>
-                                setDeleteVerifyPopup(false)
-                            }>
+                            </Button>
+                            <Button
+                                variant="contained"
+                                onClick={() =>
+                                    setDeleteVerifyPopup(false)
+                                }>
                                 No
                         </Button>
                         </div>
-
                     </div>
                 </Popup>
 
+                {/* <Popup modal
+                    trigger={<IconButton
+                        aria-label="edit"
+                        onClick={() => handleEdit(activeStrategy.strategy_id)}
+                        style={editIconStyle}>
+                        <EditIcon />
+                    </IconButton>}>
+                    <form style={{ fontFamily: 'ubuntu' }}>
+                        <label>Profit </label>
+                        <input type="number" name="take_profit" /> <br />
+                        <label>stop loss </label>
+                        <input type="number" name="stop_loss" /> <br />
+                        <input type="submit" value="submit" />
+                    </form>
+                </Popup> */}
+
+                <Popup open={isEditPopup} closeOnDocumentClick onClose={(closeModal) => setEditPopup(false)}>
+                    <div className="modal">
+                        <a className="close" onClick={closeModal}></a>
+                        <AssignmentLateIcon style={{ fontSize: 80, color: "blue" }} /><br />
+                        <span style={{ color: "#888" }}>
+                            <i>{currentStrategyName}</i> <br />
+                            Edit <b>{currentStrategyType} </b> Strategy
+
+                        </span>
+                        <br />
+
+                        <form onSubmit={handleSubmit(onSubmit)} style={{ margin: "20px auto" }}>
+                            <div style={{ margin: "10px 0px 10px 0px", fontSize: "14px" }}>
+                                <Controller as={NumericInput} name="amount" defaultValue={0} control={control} min={1} max={9999999} step={1}
+                                    placeholder="Amount ..." format={amountFormat} /> <br /><br />
+                                <label >Profit target:</label><br />
+                                <Controller as={NumericInput} name="take_profit" defaultValue={0} control={control} min={3} max={10} step={1}
+                                    placeholder="Profit target  ..." format={percentFormat} /> <br />
+                                <label>Stop loss:</label><br />
+                                <Controller as={NumericInput} name="stop_loss" defaultValue={0} control={control} min={3} max={10} step={1}
+                                    placeholder="Stoploss  ..." format={percentFormat} /> <br />
+                                <br />
+                                <div style={{ display: "flex", flexDirection: "row", width: "200px", justifyContent: "space-between", margin: "0 auto" }}>
+                                    <Button
+                                        type="submit"
+                                        variant="contained"
+                                        style={{ background: "#435279", color: "white" }}>
+                                        Apply
+                                    </Button>
+                                    <Button
+                                        variant="contained"
+                                        onClick={() =>
+                                            setEditPopup(false)
+                                        }>
+                                        Cancel
+                                    </Button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </Popup>
             </div >
 
         )

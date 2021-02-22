@@ -48,7 +48,7 @@ const ManualOrder = ({ match }) => {
     }
 
     async function showPrice(selected) {
-        const url = `http://localhost:8080/api/binance/getPriceForSymbol/${selected}`;
+        const url = `https://davidomriproject.herokuapp.com/api/binance/getPriceForSymbol/${selected}`;
         const response = await fetch(url, {
             credentials: 'include',
             withCredentials: 'true',
@@ -58,7 +58,7 @@ const ManualOrder = ({ match }) => {
     }
 
     async function addMarketOrder(data) {
-        await fetch('http://localhost:8080/api/binance/marketOrder/', {
+        await fetch('https://davidomriproject.herokuapp.com/api/binance/marketOrder/', {
             method: 'POST',
             credentials: 'include',
             body: JSON.stringify(data),
@@ -68,7 +68,7 @@ const ManualOrder = ({ match }) => {
         })
     }
     async function addLimitOrder(data) {
-        await fetch('http://localhost:8080/api/binance/limitOrder/', {
+        await fetch('https://davidomriproject.herokuapp.com/api/binance/limitOrder/', {
             method: 'POST',
             credentials: 'include',
             body: JSON.stringify(data),

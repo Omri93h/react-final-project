@@ -52,10 +52,10 @@ const Nav = () => {
     const PremiumLink = (
         <NavLink to="/Premium" activeStyle={activeStyle} >
             <li style={{ height: "40px" }} >
-                <StarIcon fontSize="large" style={{ color: "gold" }} />
-                <div className="li-content" style={{ color: "gold", fontSize: "13px" }}>
-                    <b>Premium <br />
-                    Membership!
+                <StarIcon fontSize="large" style={{ color: "#bba31c" }} />
+                <div className="li-content" style={{ color: "#bba31c", fontSize: "14px" }}>
+                    <b>Premium<br />
+                    Membership
                     </b>
                 </div>
             </li>
