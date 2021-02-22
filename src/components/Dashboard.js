@@ -159,35 +159,42 @@ const Dashboard = ({ balance, orders, totalValue }) => {
                     <div className="fade-in-fast" style={positionsDataStyle}>
                         <div id="symbol" style={tableCell}>
                             <div className="table-cell-header" >Symbol</div> {
-                                orders.userOrders.map(order => (<div style={orderDataStyle} key={order.id}> {order.symbol}</div>))}
+                                orders.userOrders.map((order, i) => (
+                                    <div key={i} style={orderDataStyle} >
+                                        {order.symbol}
+                                    </div>))}
                         </div>
                         <div id="amount" style={tableCell}>
                             <div className="table-cell-header">Amount</div>
-                            {orders.userOrders.map(order => (<div style={orderDataStyle} key={order.id}> {parseFloat(order.origQty)}</div>))}
+                            {orders.userOrders.map((order, i) => (
+                                <div key={i + 100} style={orderDataStyle} >
+                                    {parseFloat(order.origQty)}
+                                </div>))}
                         </div>
                         <div id="action" style={tableCell}>
                             <div className="table-cell-header">Action</div>
-                            {orders.userOrders.map(order => (
-                                <div key={order.id} style={orderDataStyle}>
-                                    <span style={order.side === "BUY" ? { color: "green" } : { color: "red" }}>{order.side}</span>
-                                </div>
-                            ))}
+                            {orders.userOrders.map((order, i) => (
+                                <div key={i + 1000} style={orderDataStyle}>
+                                    <span style={order.side === "BUY" ? { color: "green" } : { color: "red" }}>
+                                        {order.side}
+                                    </span>
+                                </div>))}
                         </div>
                         <div id="price" style={tableCell} >
                             <div className="table-cell-header">Price</div>
-                            {orders.userOrders.map(order => (
-                                <div style={orderDataStyle} key={order.id}> {order.price}</div>))}
+                            {orders.userOrders.map((order, i) => (
+                                <div style={orderDataStyle} key={i + 10000}> {order.price}</div>))}
                         </div>
                         <div id="status" style={tableCell}>
                             <div className="table-cell-header">Status</div>
-                            {orders.userOrders.map(order => (
-                                <div style={orderDataStyle} key={order.id}> {order.status}</div>
+                            {orders.userOrders.map((order, i) => (
+                                <div style={orderDataStyle} key={i + 100000}> {order.status}</div>
                             ))}
                         </div>
                         <div id="cancel" style={tableCell}>
                             <div className="table-cell-header">Cancel</div>
-                            {orders.userOrders.map(order => (
-                                <div style={orderDataStyle} key={order.id}>
+                            {orders.userOrders.map((order, i) => (
+                                <div style={orderDataStyle} key={i + 1000000}>
                                     <CancelIcon
                                         style={{ height: "20px", color: "red" }}
                                         variant="contained"

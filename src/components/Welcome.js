@@ -9,7 +9,6 @@ const Welcome = (props) => {
         window.location.assign('http://localhost:8080/auth/google');
     }
 
-
     const centerDivStyle = {
         position: "relative",
         color: "#aaa",
