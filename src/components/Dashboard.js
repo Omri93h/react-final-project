@@ -12,7 +12,7 @@ const Dashboard = ({ balance, orders, totalValue }) => {
 
     useEffect(() => {
         async function getBalance() {
-            const url = 'http://localhost:8080/api/portfolio/';
+            const url = 'https://davidomriproject.herokuapp.com/api/portfolio/';
             const response = await fetch(url, {
                 credentials: 'include',
                 withCredentials: 'true'
@@ -36,7 +36,7 @@ const Dashboard = ({ balance, orders, totalValue }) => {
         }
 
         async function getTotalValue(balance) {
-            const url = 'http://localhost:8080/api/binance/getBTCUSD';
+            const url = 'https://davidomriproject.herokuapp.com/api/binance/getBTCUSD';
             const response = await fetch(url, {
                 credentials: 'include',
                 withCredentials: 'true'
@@ -52,7 +52,7 @@ const Dashboard = ({ balance, orders, totalValue }) => {
         }
 
         async function getOrders() {
-            const url = 'http://localhost:8080/api/orders';
+            const url = 'https://davidomriproject.herokuapp.com/api/orders';
             const response = await fetch(url, {
                 credentials: 'include',
                 withCredentials: 'true'

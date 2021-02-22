@@ -17,14 +17,14 @@ import Premium from './components/Premium'
 // import Footer from './components/Footer';
 
 async function testConnection() {
-  fetch('http://localhost:8080/api/binance/connect', {
+  fetch('https://davidomriproject.herokuapp.com/api/binance/connect', {
     credentials: 'include',
     withCredentials: 'true'
   })
 }
 
 async function getUser(setAuth, setHasBinanceAPI, setThumbnailUrl) {
-  const response = await fetch('http://localhost:8080/profile', {
+  const response = await fetch('https://davidomriproject.herokuapp.com/profile', {
     credentials: 'include'
   })
   let userData = "";

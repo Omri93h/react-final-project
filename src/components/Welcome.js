@@ -6,7 +6,7 @@ const Welcome = (props) => {
     const video = process.env.PUBLIC_URL + '/vid/video2.mp4';
 
     const routeChange = () => {
-        window.location.assign('http://localhost:8080/auth/google');
+        window.location.assign('https://davidomriproject.herokuapp.com/auth/google');
     }
 
     const centerDivStyle = {

@@ -16,7 +16,7 @@ import NumericInput from 'react-numeric-input';
 
 
 async function deleteActiveStrategy(strategy_id) {
-    await fetch(`http://localhost:8080/api/strategy/${strategy_id}`, {
+    await fetch(`https://davidomriproject.herokuapp.com/api/strategy/${strategy_id}`, {
         method: "DELETE",
         credentials: 'include',
         withCredentials: 'true'
@@ -24,7 +24,7 @@ async function deleteActiveStrategy(strategy_id) {
 }
 
 async function editActiveStrategy(strategy) {
-    await fetch(`http://localhost:8080/api/strategy/${strategy.id}`, {
+    await fetch(`https://davidomriproject.herokuapp.com/api/strategy/${strategy.id}`, {
         method: "PUT",
         credentials: 'include',
         withCredentials: 'true',
@@ -37,7 +37,7 @@ async function editActiveStrategy(strategy) {
 }
 
 async function getActiveStrategies(setLoading, setActiveStrategies) {
-    let res = await fetch('http://localhost:8080/api/strategy', {
+    let res = await fetch('https://davidomriproject.herokuapp.com/api/strategy', {
         credentials: 'include',
         withCredentials: 'true'
     })

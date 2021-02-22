@@ -19,7 +19,7 @@ const symbols = [
 ];
 
 async function addStrategy(data) {
-    await fetch('http://localhost:8080/api/strategy/', {
+    await fetch('https://davidomriproject.herokuapp.com/api/strategy/', {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify(data),
