@@ -139,6 +139,14 @@ const Strategies = ({ userData }) => {
         fontSize: "14px"
     }
 
+    const buttonContainer = {
+        display: "flex",
+        flexDirection: "row",
+        width: "200px",
+        justifyContent: "space-between",
+        margin: "0 auto"
+    }
+
     const strategiesPage = () => {
         return (
             <div className="page">
@@ -228,7 +236,7 @@ const Strategies = ({ userData }) => {
                     </Grid>
                 </section>
 
-                <Popup open={isDeleteVerifyPopup} closeOnDocumentClick onClose={(closeModal) => setDeleteVerifyPopup(false)}>
+                <Popup open={isDeleteVerifyPopup} closeOnDocumentClick onClose={closeModal}>
                     <div className="modal">
                         <a className="close" onClick={closeModal}></a>
                         <AssignmentLateIcon style={{ fontSize: 80, color: "orange" }} /><br />
@@ -258,45 +266,34 @@ const Strategies = ({ userData }) => {
                     </div>
                 </Popup>
 
-                {/* <Popup modal
-                    trigger={<IconButton
-                        aria-label="edit"
-                        onClick={() => handleEdit(activeStrategy.strategy_id)}
-                        style={editIconStyle}>
-                        <EditIcon />
-                    </IconButton>}>
-                    <form style={{ fontFamily: 'ubuntu' }}>
-                        <label>Profit </label>
-                        <input type="number" name="take_profit" /> <br />
-                        <label>stop loss </label>
-                        <input type="number" name="stop_loss" /> <br />
-                        <input type="submit" value="submit" />
-                    </form>
-                </Popup> */}
-
                 <Popup open={isEditPopup} closeOnDocumentClick onClose={(closeModal) => setEditPopup(false)}>
                     <div className="modal">
                         <a className="close" onClick={closeModal}></a>
                         <AssignmentLateIcon style={{ fontSize: 80, color: "blue" }} /><br />
                         <span style={{ color: "#888" }}>
-                            <i>{currentStrategyName}</i> <br />
                             Edit <b>{currentStrategyType} </b> Strategy
-
+                            <br /><br />
+                            <i>{currentStrategyName}</i>
                         </span>
                         <br />
 
                         <form onSubmit={handleSubmit(onSubmit)} style={{ margin: "20px auto" }}>
                             <div style={{ margin: "10px 0px 10px 0px", fontSize: "14px" }}>
+
                                 <Controller as={NumericInput} name="amount" defaultValue={0} control={control} min={1} max={9999999} step={1}
                                     placeholder="Amount ..." format={amountFormat} /> <br /><br />
+
                                 <label >Profit target:</label><br />
                                 <Controller as={NumericInput} name="take_profit" defaultValue={0} control={control} min={3} max={10} step={1}
                                     placeholder="Profit target  ..." format={percentFormat} /> <br />
+
                                 <label>Stop loss:</label><br />
                                 <Controller as={NumericInput} name="stop_loss" defaultValue={0} control={control} min={3} max={10} step={1}
                                     placeholder="Stoploss  ..." format={percentFormat} /> <br />
+
                                 <br />
-                                <div style={{ display: "flex", flexDirection: "row", width: "200px", justifyContent: "space-between", margin: "0 auto" }}>
+
+                                <div style={buttonContainer}>
                                     <Button
                                         type="submit"
                                         variant="contained"

@@ -9,7 +9,6 @@ const Welcome = (props) => {
         window.location.assign('https://davidomriproject.herokuapp.com/auth/google');
     }
 
-
     const centerDivStyle = {
         position: "relative",
         color: "#aaa",
