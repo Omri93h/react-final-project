@@ -136,11 +136,10 @@ function App() {
               <Switch name="not-logged-in">
                 <React.Fragment>
                   <Route exact path="/" render={() => <Welcome auth={authorization} user={userControl} />} />
-                  <Route path="/sign-up" />
                   {isAuthorized && hasBinanceAPI ? {} : <Redirect to="/" />}
                 </React.Fragment>
               </Switch>
-            </>
+            </> 
           )
       }
 
