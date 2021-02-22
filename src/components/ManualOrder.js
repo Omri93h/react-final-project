@@ -42,7 +42,7 @@ const ManualOrder = ({ match }) => {
         data.symbol = data.symbol.value;
         data.action_type = actionType;
         data.price = data.price.toFixed(8);
-        orderType == "market" ?
+        orderType === "market" ?
             await addMarketOrder(data) :
             await addLimitOrder(data);
     }
@@ -170,10 +170,10 @@ const ManualOrder = ({ match }) => {
                             <Controller
                                 name="price"
                                 control={control}
-
+                                defaultValue="Market Price"
                                 render={({ onChange }) => (
                                     <NumericInput
-                                        disabled={orderType == "market" ? true : false}
+                                        disabled={orderType === "market" ? true : false}
                                         min={0.00000001}
                                         max={1000}
                                         step={0.00000001}
@@ -183,7 +183,7 @@ const ManualOrder = ({ match }) => {
                                         }}
                                         format={floatFormat}
                                         defaultValue={currencyPrice}
-                                        placeholder={orderType == "market" ? "MARKET PRICE" : "0.00000001"}
+                                        placeholder={orderType === "market" ? "MARKET PRICE" : "0.00000001"}
                                     />
                                 )
                                 }

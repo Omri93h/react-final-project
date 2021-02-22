@@ -342,13 +342,26 @@ section {
   opacity: 0.6;
 }
 
-.active-strategy {
+.premium-card {
   position: relative;
-  background: #999;
-  border-radius: 5px;
+  border: 1px solid darkgrey;
+  border-radius: 10px;
   min-width: 200px;
   width: 300px;
   height: 180px;
+  margin: 30px auto;
+  margin-bottom: 15px;
+  transition: .1s ease-out;
+  text-align: center;
+}
+
+.active-strategy {
+  position: relative;
+  background: linear-gradient(#ddd, gold);
+  border-radius: 5px;
+  min-width: 200px;
+  width: 270px;
+  height: 200px;
   margin: 30px auto;
   margin-bottom: 15px;
   text-align: center;
@@ -359,8 +372,8 @@ section {
   position: absolute;
   width: 100%;
   line-height: 24px;
-  font-size: 20px;
-  margin-top: 5px;
+  font-size: 22px;
+  margin: 12px 0;
   text-align: center;
 }
 
@@ -368,4 +381,24 @@ section {
   margin-top: 30px;
   height: 150px;
   background-size: cover;
+}
+
+.popup-content {
+  -webkit-animation: anvil 0.2s cubic-bezier(0.38, 0.1, 0.36, 0.9) forwards;
+  font-family: 'ubuntu';
+  font-size: 30px;
+  display:flex;
+  min-height: 200px;
+  height: 250px;
+  color:green ;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #bba31c
+}
+
+
+.Select-menu-outer {
+  z-index: 999 !important;
+  position: relative;
 }

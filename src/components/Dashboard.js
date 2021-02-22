@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import Loading from './Loading';
 import btcIcon from 'cryptocurrency-icons/32/icon/btc.png'
 import RefreshIcon from '@material-ui/icons/Refresh';
-import { Button, IconButton } from '@material-ui/core';
+import { IconButton } from '@material-ui/core';
 import CancelIcon from '@material-ui/icons/Cancel';
 
 const Dashboard = ({ balance, orders, totalValue }) => {
@@ -74,7 +74,6 @@ const Dashboard = ({ balance, orders, totalValue }) => {
                     orders.setUserOrders(userOrders);
                     total = await getTotalValue(userCurrentBalance);
                     totalValue.setUserTotal(total);
-                    console.log(totalValue);
                 }
                 setLoading(false);
             } catch (error) {
@@ -170,7 +169,7 @@ const Dashboard = ({ balance, orders, totalValue }) => {
                             <div className="table-cell-header">Action</div>
                             {orders.userOrders.map(order => (
                                 <div key={order.id} style={orderDataStyle}>
-                                    <span style={order.side == "BUY" ? { color: "green" } : { color: "red" }}>{order.side}</span>
+                                    <span style={order.side === "BUY" ? { color: "green" } : { color: "red" }}>{order.side}</span>
                                 </div>
                             ))}
                         </div>
@@ -181,13 +180,18 @@ const Dashboard = ({ balance, orders, totalValue }) => {
                         </div>
                         <div id="status" style={tableCell}>
                             <div className="table-cell-header">Status</div>
-                            {orders.userOrders.map(order => (<div style={orderDataStyle} key={order.id}> {order.status}</div>))}
+                            {orders.userOrders.map(order => (
+                                <div style={orderDataStyle} key={order.id}> {order.status}</div>
+                            ))}
                         </div>
                         <div id="cancel" style={tableCell}>
                             <div className="table-cell-header">Cancel</div>
                             {orders.userOrders.map(order => (
-                                <div style={orderDataStyle}>
-                                    <CancelIcon style={{ height: "20px" }} variant="contained" key={order.id} />
+                                <div style={orderDataStyle} key={order.id}>
+                                    <CancelIcon
+                                        style={{ height: "20px", color: "red" }}
+                                        variant="contained"
+                                    />
                                 </div>
                             ))}
                         </div>

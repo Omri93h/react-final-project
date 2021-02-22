@@ -3,7 +3,6 @@ import React from 'react';
 import Header from './components/Header';
 import Dashboard from './components/Dashboard';
 import Nav from './components/Nav';
-import Footer from './components/Footer';
 import Strategies from './components/Strategies';
 import Settings from './components/Settings';
 import Welcome from './components/Welcome';
@@ -14,6 +13,8 @@ import PageError from './components/PageError'
 import { useState, useEffect } from 'react';
 import Login from './components/Login';
 import ManualOrder from './components/ManualOrder';
+import Premium from './components/Premium'
+// import Footer from './components/Footer';
 
 async function testConnection() {
   fetch('http://localhost:8080/api/binance/connect', {
@@ -103,6 +104,7 @@ function App() {
                                 <Route path="/settings" component={Settings} />
                                 <Route path="/Manual_Order" component={ManualOrder} />
                                 <Route path="/strategies/:strategyName" component={SetStrategy} />
+                                <Route path="/Premium" component={Premium} />
                                 <Route path='*' component={PageError} />
                               </Switch>
 

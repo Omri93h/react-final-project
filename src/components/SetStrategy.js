@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
 import Select from 'react-select';
 import { useForm, Controller } from 'react-hook-form';
+import strategies from './../data/strategies.json'
 import NumericInput from 'react-numeric-input';
 import AddIcon from '@material-ui/icons/Add';
 import { Button } from "@material-ui/core";
-
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
+import AssignmentTurnedInIcon from '@material-ui/icons/AssignmentTurnedIn';
 
 const symbols = [
     { value: 'DOGEBTC', label: 'DOGE/BTC' },
@@ -28,21 +31,28 @@ async function addStrategy(data) {
 
 
 const SetStrategy = ({ match }) => {
-    const { control, handleSubmit } = useForm();
-    const onSubmit = async (data) => {
-        data.strategy_type = match.params.strategyName;
-        data.currency = data.currency.value
-        console.log(data);
-        await addStrategy(data)
-    }
+    const [isPopupOpen, setOpen] = useState(false);
+    const closeModal = () => setOpen(false);
 
     const [selected, setSelected] = useState();
+    const { control, handleSubmit } = useForm();
+    const onSubmit = async (data) => {
+        data.strategy_type = match.params.strategyName.replaceAll("_", " ");
+        data.currency = data.currency.value;
+        await addStrategy(data);
+        handleSubmitPopup();
+    }
+
+    function handleSubmitPopup() {
+        setOpen(!isPopupOpen);
+        console.log("pop up?")
+    }
+
+
 
     function chooseSelected(opt) {
         setSelected(opt);
     }
-
-    // const strategy_name = match.params.strategyName;
 
 
     function percentFormat(num) {
@@ -90,11 +100,19 @@ const SetStrategy = ({ match }) => {
                         <label>Stop loss:</label><br />
                         <Controller as={NumericInput} name="stop_loss" defaultValue={0} control={control} min={3} max={10} step={1}
                             placeholder="Stoploss  ..." format={percentFormat} /> <br /><br />
-
-                        <Button type="submit" variant="contained" size="large" style={{ background: "#1c316d", color: "white" }} startIcon={<AddIcon />}>Add Strategy</Button>
-
+                        <Button type="submit" variant="contained" size="large"
+                            style={{ background: "#1c316d", color: "white" }}
+                            startIcon={<AddIcon />}>
+                            Add Strategy
+                         </Button>
                     </form>
-
+                    <Popup open={isPopupOpen} closeOnDocumentClick onClose={closeModal}>
+                        <div className="modal">
+                            <a className="close" onClick={closeModal}>&times;</a>
+                            <AssignmentTurnedInIcon style={{ fontSize: 80, color: "green" }} /><br />
+                                    New strategy added successfully !
+                            </div>
+                    </Popup>
                 </div>
             </section>
         </div >

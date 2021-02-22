@@ -4,9 +4,11 @@ import strategies from './../data/strategies.json'
 import { Switch, Route, Link } from 'react-router-dom';
 import SetStrategy from './SetStrategy';
 import Loading from './Loading';
+import { Button } from "@material-ui/core";
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
+import AssignmentLateIcon from '@material-ui/icons/AssignmentLate';
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 
@@ -26,35 +28,44 @@ async function editActiveStrategy(strategy_id) {
     })
 }
 
+async function getActiveStrategies(setLoading, setActiveStrategies) {
+    let res = await fetch('http://localhost:8080/api/strategy', {
+        credentials: 'include',
+        withCredentials: 'true'
+    })
+    res = await res.json();
+    setActiveStrategies(res);
+    setLoading(false)
+}
+
 const Strategies = ({ userData }) => {
     const [activeStrategies, setActiveStrategies] = useState(undefined);
     const [loading, setLoading] = useState(true);
 
-    const [open, setOpen] = useState(false);
-    const closeModal = () => setOpen(false);
+    const [isPremiumPopup, setPremiumPopup] = useState(false);
+    const [isDetDeleteVerifyPopup, setDeleteVerifyPopup] = useState(false);
+    const [strategyToDelete, setStrategyToDelete] = useState(null);
+
+    const closeModal = () => {
+        setPremiumPopup(false);
+        setDeleteVerifyPopup(false);
+    }
 
     useEffect(() => {
-        async function getActiveStrategies() {
-            let res = await fetch('http://localhost:8080/api/strategy', {
-                credentials: 'include',
-                withCredentials: 'true'
-            })
-            res = await res.json();
-            setActiveStrategies(res);
-            setLoading(false)
-        }
-
-        getActiveStrategies();
+        setLoading(true);
+        setActiveStrategies(undefined);
+        getActiveStrategies(setLoading, setActiveStrategies);
     }, []);
-
 
     const StrategyPage = [];
     strategies.forEach((strategy) => (
         StrategyPage.push(strategy.name.replaceAll(" ", "_"))
     ));
 
-    const deleteIconStyle = { position: "absolute", right: "0", zIndex: "1" };
-    const editIconStyle = { position: "absolute", left: "0", zIndex: "1" };
+    function handleDeleteVerifyPopup(strategy_id) {
+        setDeleteVerifyPopup(!isDetDeleteVerifyPopup);
+        setStrategyToDelete(strategy_id);
+    }
 
     function handleDelete(strategy_id) {
         deleteActiveStrategy(strategy_id);
@@ -62,16 +73,28 @@ const Strategies = ({ userData }) => {
     }
 
     function handleEdit(strategy_id) {
-
+        console.log(strategy_id);
     }
 
     function handlePremiumPopup(isPremiumStrategy, isPremiumUser) {
         if (isPremiumStrategy && !isPremiumUser) {
-            console.log("user in not premium");
-            console.log("user isPremium: ", isPremiumUser);
-            setOpen(!open)
+            setPremiumPopup(!isPremiumPopup)
         }
     }
+
+
+
+    const deleteIconStyle = { position: "absolute", right: "0", zIndex: "1" };
+    const editIconStyle = { position: "absolute", left: "0", zIndex: "1" };
+
+    const cardContentStyle = {
+        marginTop: "40px",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        fontSize: "14px"
+    }
+
     const strategiesPage = () => {
         return (
             <div className="page">
@@ -84,8 +107,9 @@ const Strategies = ({ userData }) => {
                                 <Loading activeStrategies={activeStrategies} isLoading={loading} />
                                 :
                                 activeStrategies.map((activeStrategy) => (
-                                    <div className="active-strategy" key={activeStrategy.strategy_id} style={{ background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8 90%)' }} >
-                                        <IconButton aria-label="delete" onClick={() => handleDelete(activeStrategy.strategy_id)}
+                                    <div className="active-strategy" key={activeStrategy.strategy_id}>
+                                        <IconButton aria-label="delete" onClick={() =>
+                                            handleDeleteVerifyPopup(activeStrategy.strategy_id)}
                                             style={deleteIconStyle}>
                                             <DeleteIcon />
                                         </IconButton>
@@ -106,22 +130,28 @@ const Strategies = ({ userData }) => {
                                             </form>
                                         </Popup>
 
-                                        <div className="card-header"> {activeStrategy.strategy_type}</div>
-                                        <div className="card-content" style={{ marginTop: "30px", height: "100%", display: "flex", flexDirection: "column" }}>
-                                            <span style={{ fontSize: "12px" }}>
-                                                {activeStrategy.status}
-                                            </span><br />
-                                            <span style={{ fontSize: "30px" }}> {activeStrategy.currency}</span><br />
-                                            <span>Expected Profit:  {activeStrategy.take_profit}%</span>
-                                            <span>Stop Loss:  {activeStrategy.stop_loss}%</span>
-                                            <span>Amount:  {activeStrategy.amount}</span>
+                                        <div className="card-header"> {activeStrategy.currency}</div>
+                                        <div className="card-content"
+                                            style={cardContentStyle}>
+                                            <div style={{ fontSize: "13px" }}>
+                                                {
+                                                    activeStrategy.status === "waiting_to_buy" ?
+                                                        <span style={{ color: "green" }}>Waiting To <b>BUY</b></span> :
+                                                        <span style={{ color: "red" }}>Waiting To <b>SELL</b></span>
+                                                }
+                                            </div><br /><br />
+                                            <span style={{ fontFamily: "monospace", fontSize: "22px" }}> {activeStrategy.strategy_type}</span>
+                                            <br /><br />
+                                            <span>Amount:  <b>{activeStrategy.amount + " " +
+                                                activeStrategy.currency.slice(0, -3)} </b></span>
+                                            <span>Expected Profit:  <b>{activeStrategy.take_profit}%</b></span>
+                                            <span>Stop Loss at:  <b>{activeStrategy.stop_loss}%</b></span>
                                         </div>
                                     </div>
                                 ))
                             }
                         </Grid>
                     </Grid>
-
                     <div id="active-strategies-container"></div>
                 </section>
 
@@ -132,10 +162,11 @@ const Strategies = ({ userData }) => {
                             {strategies.map((strategy) => (
                                 <Link
                                     key={strategy.id}
-                                    to={strategy.isPremium && !userData.is_premium ?
-                                        '/Strategies'
-                                        :
-                                        `Strategies/${StrategyPage[strategy.id]}`}
+                                    to={
+                                        strategy.isPremium && !userData.is_premium ?
+                                            '/Strategies'
+                                            :
+                                            `Strategies/${StrategyPage[strategy.id]}`}
                                 >
                                     <div className="card" key={strategy.id}
                                         onClick={() => handlePremiumPopup(strategy.isPremium, userData.is_premium)}>
@@ -145,18 +176,51 @@ const Strategies = ({ userData }) => {
                                 </Link>
                             ))
                             }
-                            <Popup open={open} onClose={closeModal}>
+                            <Popup open={isPremiumPopup} onClose={closeModal}>
                                 <div className="modal">
-                                    {/* <a className="close" onClick={closeModal}>&times;</a> <br/> */}
+                                    <a className="close" onClick={closeModal}>&times;</a> <br />
                                     Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni
                                     omnis delectus nemo, maxime molestiae dolorem numquam mollitia, voluptate
                                     ea, accusamus excepturi deleniti ratione sapiente! Laudantium, aperiam
                                     doloribus. Odit, aut.
-                                </div>
+                            </div>
                             </Popup>
                         </Grid>
                     </Grid>
                 </section>
+
+                <Popup open={isDetDeleteVerifyPopup} closeOnDocumentClick onClose={closeModal}>
+                    <div className="modal">
+                        <a className="close" onClick={closeModal}>&times;</a>
+                        <AssignmentLateIcon style={{ fontSize: 80, color: "orange" }} /><br />
+                        <span style={{ color: "#888" }}>
+                            Delete this strategy?
+                            </span>
+                        <br />
+                        <div style={{ margin: "50px 0px 20px 0px", display: "flex", justifyContent: "space-around" }}>
+                            <Button
+                                variant="contained"
+                                style={{ background: "green", color: "white" }}
+                                onClick={() => {
+                                    handleDelete(strategyToDelete)
+                                    setDeleteVerifyPopup(false)
+                                }}>
+                                Yes, Delete it
+                        </Button>
+                        &nbsp;
+                        <Button 
+                        variant="contained"
+                        style={{ background: "red", color: "white" }}
+                         onClick={() =>
+                                setDeleteVerifyPopup(false)
+                            }>
+                                No
+                        </Button>
+                        </div>
+
+                    </div>
+                </Popup>
+
             </div >
 
         )
