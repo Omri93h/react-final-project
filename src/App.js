@@ -24,8 +24,9 @@ async function testConnection() {
 }
 
 async function getUser(setAuth, setHasBinanceAPI, setThumbnailUrl) {
-  const response = await fetch('https://quiet-headland-90891.herokuapp.com/https://davidomriproject.herokuapp.com/profile', {
-    credentials: 'include'
+  const response = await fetch('https://davidomriproject.herokuapp.com/profile/', {
+    credentials: 'include',
+    withCredentials: 'true'
   })
   let userData = "";
   try {
