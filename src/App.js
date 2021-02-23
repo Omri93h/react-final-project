@@ -26,7 +26,8 @@ async function testConnection() {
 async function getUser(setAuth, setHasBinanceAPI, setThumbnailUrl) {
   const response = await fetch('https://davidomriproject.herokuapp.com/profile/', {
     credentials: 'include',
-    withCredentials: 'true'
+    withCredentials: 'true',
+    sameSite: "none"
   })
   let userData = "";
   try {
