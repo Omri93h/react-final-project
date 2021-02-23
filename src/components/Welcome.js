@@ -6,7 +6,11 @@ const Welcome = (props) => {
     const video = process.env.PUBLIC_URL + '/vid/video2.mp4';
 
     const routeChange = () => {
+<<<<<<< Updated upstream
         window.location.assign('https://davidomriproject.herokuapp.com/auth/google/');
+=======
+        window.location.assign('https://currenger.herokuapp.com/auth/google');
+>>>>>>> Stashed changes
     }
 
     const centerDivStyle = {
@@ -40,7 +44,7 @@ const Welcome = (props) => {
         height: "50px",
         right: "30px",
         top: "5px",
-        zIndex:"100"
+        zIndex: "100"
     }
 
     const contentStyle = { background: 'white', borderRadius: "10px", width: "300px", border: "0", opacity: ".9" };

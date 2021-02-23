@@ -17,29 +17,49 @@ import Premium from './components/Premium'
 // import Footer from './components/Footer';
 
 async function testConnection() {
-  fetch('https://davidomriproject.herokuapp.com/api/binance/connect', {
+  fetch('https://currenger.herokuapp.com/api/binance/connect', {
     credentials: 'include',
-    withCredentials: 'true'
+    withCredentials: true,
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
   })
 }
 
+<<<<<<< Updated upstream
 async function getUser(setAuth, setHasBinanceAPI, setThumbnailUrl) {
   const response = await fetch('https://davidomriproject.herokuapp.com/profile/', {
     credentials: 'include',
     withCredentials: 'true',
     sameSite: "none"
+=======
+async function getUser() {
+  let response = await fetch('https://currenger.herokuapp.com/profile/', {
+    method: "GET",
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    credentials: 'include',
+    withCredentials: true,
+>>>>>>> Stashed changes
   })
-  let userData = "";
+  const data = await response.json();
+  return data;
+}
+
+async function setTheUser(data, setAuth, setHasBinanceAPI, setThumbnailUrl) {
   try {
-    userData = await response.json();
-    if (userData.binance_key !== "") {
+    if (data) {
+      setAuth(true);
+    }
+    if (data.binance_key !== "") {
       await testConnection();
       setHasBinanceAPI(true)
-      setThumbnailUrl(userData.thumbnail)
+      setThumbnailUrl(data.thumbnail)
     }
-    setAuth(true);
-
-    return userData;
+    return data;
   }
   catch {
     setAuth(false);
@@ -58,20 +78,23 @@ function App() {
   const [userOrders, setUserOrders] = useState("");
   const [userTotal, setUserTotal] = useState({ BTC: 0, USD: 0 });
 
+  useEffect(() => {
+    async function Fetch() {
+      setAuth(false);
+      setHasBinanceAPI(false);
+      setThumbnailUrl(undefined);
+      const data = await getUser();
+      await setTheUser(data, setAuth, setHasBinanceAPI, setThumbnailUrl);
+      setUserData(data);
+    };
+    Fetch();
+  }, []);
+
+  const userControl = { userData, setUserData }
   const authorization = { isAuthorized, setAuth };
   const balance = { userBalance, setUserBalance };
   const orders = { userOrders, setUserOrders };
   const totalValue = { userTotal, setUserTotal };
-
-  useEffect(() => {
-    (async function Fetch() {
-      const data = await getUser(setAuth, setHasBinanceAPI, setThumbnailUrl);
-      setUserData(data)
-    })();
-  }, []);
-
-
-  const userControl = { userData, setUserData }
 
   return (
     <div className="App">
@@ -141,7 +164,7 @@ function App() {
                   {isAuthorized && hasBinanceAPI ? {} : <Redirect to="/" />}
                 </React.Fragment>
               </Switch>
-            </> 
+            </>
           )
       }
 

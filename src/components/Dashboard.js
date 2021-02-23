@@ -9,15 +9,18 @@ import CancelIcon from '@material-ui/icons/Cancel';
 const Dashboard = ({ balance, orders, totalValue }) => {
     const [loading, setLoading] = useState(true);
     const [refresh, setRefresh] = useState(false);
-
     useEffect(() => {
         async function getBalance() {
-            const url = 'https://davidomriproject.herokuapp.com/api/portfolio/';
+            const url = 'https://currenger.herokuapp.com/api/portfolio/';
             const response = await fetch(url, {
                 credentials: 'include',
-                withCredentials: 'true'
+                withCredentials: 'true',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             });
             const balance = await response.json();
+            console.log(response);
             const data = []
             for (const i in balance) {
                 balance[i].id === 'BTC' ?
@@ -36,7 +39,7 @@ const Dashboard = ({ balance, orders, totalValue }) => {
         }
 
         async function getTotalValue(balance) {
-            const url = 'https://davidomriproject.herokuapp.com/api/binance/getBTCUSD';
+            const url = 'https://currenger.herokuapp.com/api/binance/getBTCUSD';
             const response = await fetch(url, {
                 credentials: 'include',
                 withCredentials: 'true'
@@ -52,7 +55,7 @@ const Dashboard = ({ balance, orders, totalValue }) => {
         }
 
         async function getOrders() {
-            const url = 'https://davidomriproject.herokuapp.com/api/orders';
+            const url = 'https://currenger.herokuapp.com/api/orders';
             const response = await fetch(url, {
                 credentials: 'include',
                 withCredentials: 'true'
@@ -126,7 +129,11 @@ const Dashboard = ({ balance, orders, totalValue }) => {
                         :
                         <div className="fade-in-fast">
                             <div style={{ margin: "0 auto", height: "180px", display: "block", maxWidth: "360px", marginTop: "10px" }}>
-                                <PieChart data={balance.userBalance} />
+                                {
+                                    balance.userBalance ?
+                                        < PieChart data={balance.userBalance} />
+                                        : <div></div>
+                                }
                             </div>
                         </div>
                     }
@@ -158,11 +165,12 @@ const Dashboard = ({ balance, orders, totalValue }) => {
 
                     <div className="fade-in-fast" style={positionsDataStyle}>
                         <div id="symbol" style={tableCell}>
-                            <div className="table-cell-header" >Symbol</div> {
-                                orders.userOrders.map((order, i) => (
-                                    <div key={i} style={orderDataStyle} >
-                                        {order.symbol}
-                                    </div>))}
+                            <div className="table-cell-header" >Symbol</div>
+                            {orders.userOrders.map((order, i) => (
+                                <div key={i} style={orderDataStyle} >
+                                    {order.symbol}
+                                </div>))
+                            }
                         </div>
                         <div id="amount" style={tableCell}>
                             <div className="table-cell-header">Amount</div>

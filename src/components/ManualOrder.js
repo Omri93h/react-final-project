@@ -55,7 +55,7 @@ const ManualOrder = ({ match }) => {
     }
 
     async function showPrice(selected) {
-        const url = `https://davidomriproject.herokuapp.com/api/binance/getPriceForSymbol/${selected}`;
+        const url = `https://currenger.herokuapp.com/api/binance/getPriceForSymbol/${selected}`;
         const response = await fetch(url, {
             credentials: 'include',
             withCredentials: 'true',
@@ -65,7 +65,7 @@ const ManualOrder = ({ match }) => {
     }
 
     async function addMarketOrder(data) {
-        await fetch('https://davidomriproject.herokuapp.com/api/binance/marketOrder/', {
+        await fetch('https://currenger.herokuapp.com/api/binance/marketOrder/', {
             method: 'POST',
             credentials: 'include',
             body: JSON.stringify(data),
@@ -75,7 +75,7 @@ const ManualOrder = ({ match }) => {
         })
     }
     async function addLimitOrder(data) {
-        await fetch('https://davidomriproject.herokuapp.com/api/binance/limitOrder/', {
+        await fetch('https://currenger.herokuapp.com/api/binance/limitOrder/', {
             method: 'POST',
             credentials: 'include',
             body: JSON.stringify(data),
@@ -156,9 +156,9 @@ const ManualOrder = ({ match }) => {
                             defaultValue={"0.0"}
                             render={({ onChange }) => (
                                 <NumericInput
-                                    min={0.1}
+                                    min={0.01}
                                     max={9999999}
-                                    step={0.1}
+                                    step={0.01}
                                     placeholder="0.0"
                                     onChange={e => {
                                         onChange(e)
@@ -183,7 +183,7 @@ const ManualOrder = ({ match }) => {
                                         disabled={orderType === "market" ? true : false}
                                         min={0.00000001}
                                         max={1000}
-                                        step={0.00000001}
+                                        step={0.000001}
                                         precision={8}
                                         onChange={e => {
                                             onChange(e)

@@ -16,7 +16,7 @@ import NumericInput from 'react-numeric-input';
 
 
 async function deleteActiveStrategy(strategy_id) {
-    await fetch(`https://davidomriproject.herokuapp.com/api/strategy/${strategy_id}`, {
+    await fetch(`https://currenger.herokuapp.com/api/strategy/${strategy_id}`, {
         method: "DELETE",
         credentials: 'include',
         withCredentials: 'true'
@@ -24,7 +24,7 @@ async function deleteActiveStrategy(strategy_id) {
 }
 
 async function editActiveStrategy(strategy) {
-    await fetch(`https://davidomriproject.herokuapp.com/api/strategy/${strategy.id}`, {
+    await fetch(`https://currenger.herokuapp.com/api/strategy/${strategy.id}`, {
         method: "PUT",
         credentials: 'include',
         withCredentials: 'true',
@@ -37,9 +37,13 @@ async function editActiveStrategy(strategy) {
 }
 
 async function getActiveStrategies(setLoading, setActiveStrategies) {
-    let res = await fetch('https://davidomriproject.herokuapp.com/api/strategy', {
+    let res = await fetch('https://currenger.herokuapp.com/api/strategy', {
         credentials: 'include',
-        withCredentials: 'true'
+        withCredentials: 'true',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        },
     })
     res = await res.json();
     setActiveStrategies(res);
@@ -127,7 +131,22 @@ const Strategies = ({ userData }) => {
     function percentFormat(num) {
         return num + '%'
     }
+    const dataForm = (
+        <div>
+            <Controller as={NumericInput} name="amount" defaultValue={1} control={control} min={0.01} max={9999999} step={0.01}
+                placeholder="Amount ..." format={amountFormat} /> <br /><br />
 
+            <label >Profit target:</label><br />
+            <Controller as={NumericInput} name="take_profit" defaultValue={0} control={control} min={3} max={10} step={1}
+                placeholder="Profit target  ..." format={percentFormat} /> <br />
+
+            <label>Stop loss:</label><br />
+            <Controller as={NumericInput} name="stop_loss" defaultValue={0} control={control} min={3} max={10} step={1}
+                placeholder="Stoploss  ..." format={percentFormat} /> <br />
+
+            <br />
+        </div>
+    )
     const deleteIconStyle = { position: "absolute", right: "0", zIndex: "1" };
     const editIconStyle = { position: "absolute", left: "0", zIndex: "1" };
 
@@ -226,11 +245,11 @@ const Strategies = ({ userData }) => {
                             <Popup open={isPremiumPopup} onClose={closeModal}>
                                 <div className="modal">
                                     <a className="close" onClick={closeModal}></a> <br />
-                                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Beatae magni
-                                    omnis delectus nemo, maxime molestiae dolorem numquam mollitia, voluptate
-                                    ea, accusamus excepturi deleniti ratione sapiente! Laudantium, aperiam
-                                    doloribus. Odit, aut.
-                            </div>
+                                    <AssignmentLateIcon style={{ fontSize: 80, color: "grey" }} /><br />
+                                    <div style={{color:"red", fontSize:"30px"}}>
+                                        This option is available for Premium Members only!
+                                    </div>
+                                </div>
                             </Popup>
                         </Grid>
                     </Grid>
@@ -280,19 +299,7 @@ const Strategies = ({ userData }) => {
                         <form onSubmit={handleSubmit(onSubmit)} style={{ margin: "20px auto" }}>
                             <div style={{ margin: "10px 0px 10px 0px", fontSize: "14px" }}>
 
-                                <Controller as={NumericInput} name="amount" defaultValue={0} control={control} min={1} max={9999999} step={1}
-                                    placeholder="Amount ..." format={amountFormat} /> <br /><br />
-
-                                <label >Profit target:</label><br />
-                                <Controller as={NumericInput} name="take_profit" defaultValue={0} control={control} min={3} max={10} step={1}
-                                    placeholder="Profit target  ..." format={percentFormat} /> <br />
-
-                                <label>Stop loss:</label><br />
-                                <Controller as={NumericInput} name="stop_loss" defaultValue={0} control={control} min={3} max={10} step={1}
-                                    placeholder="Stoploss  ..." format={percentFormat} /> <br />
-
-                                <br />
-
+                                {dataForm}
                                 <div style={buttonContainer}>
                                     <Button
                                         type="submit"

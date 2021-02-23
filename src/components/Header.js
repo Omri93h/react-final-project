@@ -3,7 +3,7 @@ import Button from '@material-ui/core/Button';
 
 
 async function logOut(props) {
-    fetch('https://davidomriproject.herokuapp.com/auth/logout', {
+    fetch('https://currenger.herokuapp.com/auth/logout', {
         credentials: 'include',
         withCredentials: 'true'
     })

@@ -19,7 +19,7 @@ const symbols = [
 ];
 
 async function addStrategy(data) {
-    await fetch('https://davidomriproject.herokuapp.com/api/strategy/', {
+    await fetch('https://currenger.herokuapp.com/api/strategy/', {
         method: 'POST',
         credentials: 'include',
         body: JSON.stringify(data),
@@ -45,7 +45,6 @@ const SetStrategy = ({ match }) => {
 
     function handleSubmitPopup() {
         setOpen(!isPopupOpen);
-        console.log("pop up?")
     }
 
     function chooseSelected(opt) {

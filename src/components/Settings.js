@@ -4,7 +4,7 @@ import { Button } from "@material-ui/core";
 
 async function insertUserApi(data) {
     var new_data = { binance_key: data.binance_key, binance_private: data.binance_private };
-    fetch('https://davidomriproject.herokuapp.com/profile/', {
+    fetch('https://currenger.herokuapp.com/profile/', {
         method: 'PUT',
         body: JSON.stringify(new_data),
         headers: {
@@ -25,8 +25,10 @@ const Settings = () => {
 
     const form = (
         <form form onSubmit={handleSubmit(onSubmit)} style={{ margin: "20px auto" }}>
-            <Controller as="input" defaultValue="" control={control} type="text" name="binance_key" placeholder="Insert Api Key ..." /><br />
-            <Controller as="input" defaultValue="" control={control} type="text" name="binance_private" placeholder="Insert Api Secret ..." /><br />
+            <Controller as="input" defaultValue="" control={control} type="text"
+                name="binance_key" placeholder="Insert Api Key ..." /><br /><br />
+            <Controller as="input" defaultValue="" control={control} type="text"
+                name="binance_private" placeholder="Insert Api Secret ..." /><br />
             <br />
             <Button type="submit" variant="contained" >EDIT API</Button>
         </form >
@@ -34,7 +36,7 @@ const Settings = () => {
     return (
         <div className="page">
             <span className="page-header">S E T T I N G S</span>
-            <section className="big-section">
+            <section className="big-section" style={{ textAlign: "center" }}>
                 <span className="section-header">Configure API</span>
                 {form}
             </section>
